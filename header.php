@@ -5,6 +5,6 @@
         <title>Smart Gnan Crack It</title>
         <?php wp_head(); ?>
     </head>
-    <body>
+    <body class="container">
         
         <?php wp_nav_menu(array('theme_location'=>'primary')); ?>

@@ -11,3 +11,13 @@ function sgcrackit_script_enqueue() {
 }
 
 add_action('wp_enqueue_scripts', 'sgcrackit_script_enqueue');
+
+function sgcrackit_theme_setup() {
+    
+    add_theme_support('menus');
+    
+    register_nav_menu('primary', 'This is primary menu');
+    register_nav_menu('secondary', 'This is footer menu');
+}
+
+add_action('init', 'sgcrackit_theme_setup');

@@ -6,6 +6,54 @@ function sgcrackit_setup() {
 	update_option('thumbnail_size_w', 170);
 	update_option('medium_size_w', 470);
 	update_option('large_size_w', 970);
+    
+    // change the Sample page to the home page
+    if (is_admin()){
+        $home_page_title = 'Home';
+        $home_page_content = '';
+        $home_page_check = get_page_by_title($home_page_title);
+        $home_page = array(
+            'post_type' => 'page',
+            'post_title' => $home_page_title,
+            'post_content' => $home_page_content,
+            'post_status' => 'publish',
+            'post_author' => 1,
+            'post_slug' => 'home'
+        );
+        if(!the_slug_exists('home')){
+            $home_page_id = wp_insert_post($home_page);
+        }
+    }
+
+    // change the Sample page to the home page
+    if (is_admin()){
+        $home_page_title = 'All Languages';
+        $home_page_content = '';
+        $home_page_check = get_page_by_title($home_page_title);
+        $home_page = array(
+            'post_type' => 'page',
+            'post_title' => $home_page_title,
+            'post_content' => $home_page_content,
+            'post_status' => 'publish',
+            'post_author' => 1,
+            'post_slug' => 'all-languages',
+            'meta_input' => array(
+                '_wp_page_template' => 'page-all-languages.php'
+            )
+        );
+        if(!the_slug_exists('all-languages')){
+            $home_page_id = wp_insert_post($home_page);
+        }
+    }
+
+    $homepage = get_page_by_title( 'Home' );
+
+    if ( $homepage )
+    {
+        update_option( 'page_on_front', $homepage->ID );
+        update_option( 'show_on_front', 'page' );
+    }
+
 }
 add_action('init', 'sgcrackit_setup');
 
@@ -30,49 +78,3 @@ function the_slug_exists($post_name) {
 	}
 }
 
-// change the Sample page to the home page
-if (isset($_GET['activated']) && is_admin()){
-    $home_page_title = 'Home';
-    $home_page_content = '';
-    $home_page_check = get_page_by_title($home_page_title);
-    $home_page = array(
-	    'post_type' => 'page',
-	    'post_title' => $home_page_title,
-	    'post_content' => $home_page_content,
-	    'post_status' => 'publish',
-	    'post_author' => 1,
-	    'post_slug' => 'home'
-    );
-    if(!isset($home_page_check->ID) && !the_slug_exists('home')){
-        $home_page_id = wp_insert_post($home_page);
-    }
-}
-
-// change the Sample page to the home page
-if (isset($_GET['activated']) && is_admin()){
-    $home_page_title = 'All Languages';
-    $home_page_content = '';
-    $home_page_check = get_page_by_title($home_page_title);
-    $home_page = array(
-	    'post_type' => 'page',
-	    'post_title' => $home_page_title,
-	    'post_content' => $home_page_content,
-	    'post_status' => 'publish',
-	    'post_author' => 1,
-	    'post_slug' => 'all-languages',
-        'meta_input' => array(
-            '_wp_page_template' => 'page-all-languages.php'
-        )
-    );
-    if(!isset($home_page_check->ID) && !the_slug_exists('all-languages')){
-        $home_page_id = wp_insert_post($home_page);
-    }
-}
-
-$homepage = get_page_by_title( 'Home' );
-
-if ( $homepage )
-{
-    update_option( 'page_on_front', $homepage->ID );
-    update_option( 'show_on_front', 'page' );
-}

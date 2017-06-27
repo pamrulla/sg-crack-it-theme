@@ -7,6 +7,9 @@ if ( ! empty( $terms ) && ! is_wp_error( $terms ) ){
     if($cnt > 3){
         $cnt = 3;
     }
+    else if($cnt <= 1){
+        $cnt = 2;
+    }
     
     foreach ( $terms as $term ) { 
         if( $next_row % $cnt == 0)

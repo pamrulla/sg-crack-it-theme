@@ -26,6 +26,9 @@ function sgcrackit_enqueues() {
   	wp_register_script('bootstrap-js', 'https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.0.0-alpha.6/js/bootstrap.min.js', false, '4.0.0-alpha.6', true);
 	wp_enqueue_script('bootstrap-js');
 
+    wp_register_script('charts-js', 'https://www.gstatic.com/charts/loader.js', false, '', true);
+	wp_enqueue_script('charts-js');
+
 	wp_register_script('sgcrackit-js', get_template_directory_uri() . '/theme/js/sgcrackit.js', false, null, true);
 	wp_enqueue_script('sgcrackit-js');
 

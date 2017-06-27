@@ -52,6 +52,58 @@ function sgcrackit_quizes_init() {
 
 add_action('init', 'sgcrackit_quizes_init', 0);
 
+function sgcrackit_questions_init() {
+    if( post_type_exists('question') )
+    {
+        return;
+    }
+    
+    $labels = array(
+        'name' => 'Questions',
+        'singular_name' => 'Question',
+        'add_new' => 'New Question',
+        'all_items' => 'All Questions',
+        'add_new_item' => 'Add Question',
+        'edit_item' => 'Edit Question',
+        'new_item' => 'New Question',
+        'view_item' => 'View Question',
+        'search_item' => 'Seach for Question',
+        'not_fount' => 'No Question found',
+        'not_found_in_trash' => 'No Question found in trash',
+        'parent_item_colon' => 'Parent Question'
+    );
+    
+    $args = array(
+        'label' => 'Questions',
+        'description' => 'All Questions',
+        'labels' => $labels,
+        'public' => true,
+        'has_archive' => true,
+        'show_ui' => true,
+        'capability_type' => 'page',
+        'hierarchical' => false,
+        'rewrite' => array('slug' => 'question'),
+        'query_var' => true,
+        'show_in_menu' => true,
+        'show_in_nav_menu' => true,
+        'show_in_admin_bar' => true,
+        'menu_position' => 4,
+        'can_export' => true,
+        'exclude_from_search' => false,
+        'plublicly_queryable' => true,
+        'supports' => array(
+            'title',
+            'editor',
+            'thumbnail',
+            'author',
+            'page-attributes',)
+    );
+    
+    register_post_type('question', $args);
+}
+
+add_action('init', 'sgcrackit_questions_init', 0);
+
 function sgcrackit_custom_taxonomies() {
     
     if(taxonomy_exists('level')){
@@ -81,7 +133,7 @@ function sgcrackit_custom_taxonomies() {
 		'rewrite' => array( 'slug' => 'level' )
     );
     
-    register_taxonomy('level', array('quiz'), $args);
+    register_taxonomy('level', array('quiz', 'question'), $args);
     
     if (taxonomy_exists('language')){
         return;
@@ -110,13 +162,27 @@ function sgcrackit_custom_taxonomies() {
 		'rewrite' => array( 'slug' => 'language' )
     );
     
-    register_taxonomy('language', array('quiz'), $args);
+    register_taxonomy('language', array('quiz', 'question'), $args);
+    
+    
+    if ( !term_exists( 'Beginner', 'level' )) {
+        wp_insert_term( 'Beginner', 'level' );
+    }
+    
+    if ( !term_exists( 'Intermediate', 'level' )) {
+        wp_insert_term( 'Intermediate', 'level' );
+    }
+    
+    if ( !term_exists( 'Advanced', 'level' )) {
+        wp_insert_term( 'Advanced', 'level' );
+    }
 }
 
 add_action('init', 'sgcrackit_custom_taxonomies');
 
 function sgcrackit_rewrite_flush() {
     sgcrackit_quizes_init();
+    sgcrackit_questions_init();
     sgcrackit_custom_taxonomies();
     flush_rewrite_rules();
 }

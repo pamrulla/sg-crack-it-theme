@@ -16,6 +16,8 @@ function sgcrackit_enqueues() {
 	/* Scripts */
 
 	wp_enqueue_script( 'jquery' );
+    
+    wp_enqueue_script( 'jquery-ui-sortable' );
 	
   	wp_register_script('modernizr',  'https://cdnjs.cloudflare.com/ajax/libs/modernizr/2.8.3/modernizr.min.js', false, '2.8.3', true);
 	wp_enqueue_script('modernizr');

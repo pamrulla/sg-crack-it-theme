@@ -149,3 +149,52 @@ ol.commentlist li ul {
   text-align: center
 }
 
+/* Quiz Styles */
+.custom-control {
+    border: 1px solid transparent;
+    border-radius: 4px;
+    padding-bottom: 0.5rem;
+    padding-top: 0.5rem;
+    padding-left: 3rem;
+    display: block;
+}
+
+.custom-control:hover {
+    border: 1px solid rgb(66, 123, 250);
+    border-radius: 4px;
+}
+
+.custom-control-indicator {
+    position: absolute;
+    top: .5rem;
+    left: 0;
+    display: block;
+    width: 1.5rem;
+    height: 1.5rem;
+    pointer-events: none;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    background-color: #ddd;
+    background-repeat: no-repeat;
+    background-position: center center;
+    -webkit-background-size: 50% 50%;
+    background-size: 50% 50%;
+}
+
+.card-placeholder {
+	border: 1px dotted black;
+  border-radius: 4px;
+	margin: 0 15px 20px 15px;
+  padding: 0;
+	height: 50px;
+}
+
+.forsorting{
+    margin: 2px;
+}
+
+.forsorting > .card-block{
+    padding: 5px;
+}

@@ -7,14 +7,33 @@ The Single Posts Loop
 
 <?php if(have_posts()): while(have_posts()): the_post(); ?>
     <article role="article" id="post_<?php the_ID()?>" <?php post_class()?>>
-        <header>
-            <h2><?php the_title()?></h2>
-        </header>
         <section>
-            <!-- <?php the_post_thumbnail(); ?>
-            <?php the_content()?>
-            <?php wp_link_pages(); ?> -->
-            <div id="chart_div" style="width: 400px; height: 400px;"></div>
+            <div class="card-group">
+              <div class="card">
+                <div class="card-block">
+                  <h4 class="card-title"><?php the_title()?></h4>
+                  <p class="card-text"><?php the_content()?></p>
+                </div>
+                <div class="card-footer text-right">
+                  <small class="text-muted">Number of students used it</small>
+                    <a href="<?php echo get_permalink(get_page_by_path('quiz-app')->ID);/*.'?id='.the_ID().'&name='.the_title();*/ ?>" class="btn btn-primary">Start</a>
+                </div>
+              </div>
+              <div class="card">
+                <div class="card-block">
+                    <div class="row">
+                        <div class="col-sm-8 offset-sm-1">
+                            <div id="chart_div" style="width: 400px; height: 400px;"></div>
+                        </div>
+                    </div>
+                  
+                    <div class="row">
+                        <div class="col-sm-4"><small style="color:red"><strong>Beginner 0-100</strong></small></div>
+                        <div class="col-sm-4"><small style="color:orange"><strong>Intermediate 101-200</strong></small></div>
+                        <div class="col-sm-4"><small style="color:green"><strong>Advanced 201-300</strong></small></div>
+                    </div>
+                </div>
+              </div>
             <script type="text/javascript">
                   function LoadGoogle()
                     {

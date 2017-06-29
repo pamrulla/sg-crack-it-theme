@@ -17,9 +17,7 @@ function sgcrackit_enqueues() {
 
 	wp_enqueue_script( 'jquery' );
     
-    wp_enqueue_script( 'jquery-ui-sortable' );
-	
-  	wp_register_script('modernizr',  'https://cdnjs.cloudflare.com/ajax/libs/modernizr/2.8.3/modernizr.min.js', false, '2.8.3', true);
+    wp_register_script('modernizr',  'https://cdnjs.cloudflare.com/ajax/libs/modernizr/2.8.3/modernizr.min.js', false, '2.8.3', true);
 	wp_enqueue_script('modernizr');
 
 	wp_register_script('tether',  'https://cdnjs.cloudflare.com/ajax/libs/tether/1.4.0/js/tether.min.js', false, '1.4.0', true);
@@ -33,6 +31,12 @@ function sgcrackit_enqueues() {
 
 	wp_register_script('sgcrackit-js', get_template_directory_uri() . '/theme/js/sgcrackit.js', false, null, true);
 	wp_enqueue_script('sgcrackit-js');
+    
+    if(is_page('quiz-app')){
+        wp_enqueue_script( 'jquery-ui-sortable' );
+	    wp_register_script('quiz-app-js', get_template_directory_uri() . '/theme/js/quizapp.js', false, null, true);
+	    wp_enqueue_script('quiz-app-js');
+    }
 
 	/*if (is_singular() && comments_open() && get_option('thread_comments')) {
 		wp_enqueue_script('comment-reply');

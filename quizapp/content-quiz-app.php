@@ -1,10 +1,12 @@
+<br/>
 <div class="card">
     <div class="card-header">
         <h4>This is title</h4>
     </div>
     <div class="card-block">
         <div class="quiz-content">
-            <div class="container">
+            <form>
+                <div class="container">
                 <div class="row">
                     <div class="col-sm-12">
                         <div class="progress">
@@ -15,7 +17,13 @@
                 <br/>
                 <div class="row">
                     <div class="col-sm-10">
-                        <h5>This is the question</h5>
+                        <span id="quiz-question">This is the question
+                        <pre>
+                            main()
+                            {
+                                printf("hello");
+                            }
+                        </pre></span>
                     </div>
                     <div class="col-sm-2">
                         <div class="countdown">
@@ -26,7 +34,45 @@
                         </div>
                     </div>
                 </div>
+                <hr/>
+                <div class="row">
+                    <div class="col-sm-8 offset-sm-2">
+                        <div id="qtn-options">
+                            <div class="custom-controls-stacked">
+                                <label class="custom-control custom-checkbox">
+                                  <input type="checkbox" class="custom-control-input" id="check1" name="check-1">
+                                  <span class="custom-control-indicator"></span>
+                                  <span class="custom-control-description">Check 1</span>
+                                </label>
+                                <label class="custom-control custom-checkbox">
+                                  <input type="checkbox" class="custom-control-input" id="check2" name="check-2">
+                                  <span class="custom-control-indicator"></span>
+                                  <span class="custom-control-description">Check 2</span>
+                                </label>
+                                <label class="custom-control custom-checkbox">
+                                  <input type="checkbox" class="custom-control-input" id="check3" name="check-3">
+                                  <span class="custom-control-indicator"></span>
+                                  <span class="custom-control-description">Check 3</span>
+                                </label>
+                                <label class="custom-control custom-checkbox">
+                                  <input type="checkbox" class="custom-control-input" id="check4" name="check-4">
+                                  <span class="custom-control-indicator"></span>
+                                  <span class="custom-control-description">Check 4</span>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <hr/>
+                <div class="row">
+                    <div class="col-sm-2 offset-sm-10">
+                        <div id="qtn-button">
+                            <button type="submit" class="btn btn-primary">Submit</button>
+                        </div>
+                    </div>
+                </div>
             </div>
+            </form>
         </div>
     </div>
     <div class="card-footer text-center">

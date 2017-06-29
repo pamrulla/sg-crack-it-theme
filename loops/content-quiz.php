@@ -39,6 +39,7 @@ The Single Posts Loop
                     {
                         if(typeof google != 'undefined')
                         {
+                            console.log("defined");
                               google.charts.load('current', {'packages':['gauge']});
                               google.charts.setOnLoadCallback(drawChart);
 
@@ -79,6 +80,7 @@ The Single Posts Loop
                         }
                         else
                         {
+                            console.log("Not defined");
                             setTimeout(LoadGoogle, 30);
                         }
                     }

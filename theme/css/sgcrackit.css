@@ -241,3 +241,9 @@ svg circle {
     stroke-dashoffset: 113px;
   }
 }
+
+
+/* Hide Navbar on quiz page */
+.page-template-page-quiz-app .navbar{
+    display: none;
+}

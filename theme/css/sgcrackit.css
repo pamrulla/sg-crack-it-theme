@@ -247,3 +247,7 @@ svg circle {
 .page-template-page-quiz-app .navbar{
     display: none;
 }
+
+.page-template-page-quiz-app footer{
+    display: none;
+}

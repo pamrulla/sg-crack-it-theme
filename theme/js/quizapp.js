@@ -1,24 +1,39 @@
 var isQuizStarted = false;
 var currentQuestion = 0;
 var data = null;
-var ans;
+var ans = [];
 
-
-var sampleData = '{"Title": "Test Quiz 1","ID": "1","Level": "Beginner","Questions": [{"ID": "1","Type": "MC","Question": "This is single choice question","Options": ["option1","option2"],"TimeLimit": "30"},{"ID": "1","Type": "MA","Question": "This is multiple select question","Options": ["choice1","choice2","choice3","choice4"],"TimeLimit": "30"},{"ID": "1","Type": "SORT","Question": "This is sorting question","Options": ["item1","item2","item3","item4","item5","item6","item7","item8"],"TimeLimit": "60"},{"ID": "1","Type": "DESC","Question": "This is descriptive question","TimeLimit": "2"}]}';
-
+function toggleSpinner(toHide) {
+    jQuery(function($){
+        if(toHide){
+            $("#loader").hide();    
+        }
+        else {
+            $("#loader").show();    
+        }
+    });
+}
 
 function startQuiz() {
+    
+    toggleSpinner(false);
     //Get data from ajax
-    
-    data = jQuery.parseJSON(sampleData);
-    
-    jQuery(function($){
-        $('#quiz-content').fadeOut(500, function(){ 
-            jQuery(function($){
-                isQuizStarted = true;
-                currentQuestion = 1;
-                prepareQuestion();
-                $('#quiz-content').fadeIn(500);
+    d = {
+        action: 'sgcrackit_ajax_get_quiz_questions'
+    };
+    jQuery.post(ajaxurl, d, function(resp){
+        
+        data = jQuery.parseJSON(resp.data);
+        
+        jQuery(function($){
+            toggleSpinner(true);
+            $('#quiz-content').fadeOut(500, function(){ 
+                jQuery(function($){
+                    isQuizStarted = true;
+                    currentQuestion = 1;
+                    prepareQuestion();
+                    $('#quiz-content').fadeIn(500);
+                });
             });
         });
     });
@@ -54,6 +69,7 @@ function prepareQuestion() {
     jQuery(function($){
         $('#quiz-content').html(content);
     });
+    toggleSpinner(true);
 }
 
 function prepareQuestionTitle() {
@@ -109,7 +125,7 @@ function prepareNextButton() {
     content += '<div id="qtn-button">';
     content += '<button name="btn" type="button" class="btn btn-primary" onclick="processQuestion();">';
     content += (currentQuestion == data.Questions.length) ? 'Finish' : 'Next';
-    content += '</button>';
+    content += ' <i id="loader" class="fa fa-spinner fa-spin"></button>';
     content += '</div>';
     content += '</div>';
     content += '</div>';
@@ -236,9 +252,10 @@ function processAnswer() {
 }
 
 function processSORTAnswer() {
+    ans.splice(0, ans.length);
     jQuery(function($){
         $(".sorting").find(".card-block").each(function() {
-          console.log($( this ).text() );
+          ans.push($( this ).text());
         });
     });
     return false;
@@ -252,6 +269,9 @@ function processMCAnswer() {
             isError = true;
             return;
         }
+        ans.splice(0, ans.length);
+        for(i =0; i < MCAnswer.length; i++)
+            ans.push(MCAnswer[i].value);
         isError = false;
         return;
     });
@@ -266,6 +286,9 @@ function processMAAnswer() {
             isError = true;
             return;
         }
+        ans.splice(0, ans.length);
+        for(i =0; i < MAAnswer.length; i++)
+            ans.push(MAAnswer[i].name);
         isError = false;
         return;
     });
@@ -285,6 +308,8 @@ function processDESCAnswer() {
             isError = true;
             return;
         }
+        ans.splice(0, ans.length);
+        ans.push(val);
         isError = false;
         return;
     });
@@ -292,24 +317,47 @@ function processDESCAnswer() {
 }
 
 function processQuestion() {
-    //send response to ajax
+    
+    toggleSpinner(false);
+    
     if(processAnswer()) {
         jQuery(function($){
            $("#no-answer").show();
        });
+       toggleSpinner(true);
        return;
     }
-    if(currentQuestion == data.Questions.length) {
-        endingPage();
-        return;
-    }
-    jQuery(function($){
-        $("#no-answer").hide();
-        $('#quiz-content').fadeOut(500, function(){ 
-            jQuery(function($){
-                currentQuestion++;
-                prepareQuestion();
-                $('#quiz-content').fadeIn(500);
+    
+    answers = { 
+                'id' : data.ID,
+                'qtnId' : data.Questions[currentQuestion - 1].ID,
+                'userId' : 1,
+                'answer' : ans,
+                'isCompleted' :  currentQuestion == data.Questions.length
+              };
+    
+    d = {
+        action: 'sgcrackit_ajax_update_quiz_progress',
+        data: answers
+    };
+    
+    jQuery.post(ajaxurl, d, function(resp){
+        //console.log(resp.data);
+        
+        if(currentQuestion == data.Questions.length) {
+            endingPage();
+            toggleSpinner(true);
+            return;
+        }
+        
+        jQuery(function($){
+            $("#no-answer").hide();
+            $('#quiz-content').fadeOut(500, function(){ 
+                jQuery(function($){
+                    currentQuestion++;
+                    prepareQuestion();
+                    $('#quiz-content').fadeIn(500);
+                });
             });
         });
     });
@@ -348,12 +396,13 @@ function startingPage(){
     content += '<li>You can not skip any question.</li>';
     content += '<li>You can not go back to previous question.</li>';
     content += '</ul>';
-    content += '<button type="button" class="btn btn-primary" onclick="startQuiz();">Start</button>';
+    content += '<button type="button" class="btn btn-primary" onclick="startQuiz();">Start <i id="loader" class="fa fa-spinner fa-spin"></i></button>';
     content += '</div>';
     jQuery(function($){
         $("#no-answer").hide();
         $('#quiz-content').html(content);
     });
+    toggleSpinner(true);
 }
     
 if (!isQuizStarted) {

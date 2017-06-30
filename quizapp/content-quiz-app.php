@@ -1,3 +1,7 @@
+<script>
+    var ajaxurl = '<?php echo admin_url('admin-ajax.php'); ?>';
+</script>
+
 <br/>
 <div class="card">
     <div class="card-header text-center">

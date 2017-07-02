@@ -8,3 +8,4 @@ require get_template_directory() . '/functions/enqueues.php';
 require get_template_directory() . '/functions/navbar.php';
 require get_template_directory() . '/functions/ajaxhandler.php';
 require get_template_directory() . '/admin/questions.php';
+require get_template_directory() . '/admin/validator.php';

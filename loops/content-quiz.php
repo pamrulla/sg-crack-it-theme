@@ -6,6 +6,7 @@ The Single Posts Loop
 ?> 
 
 <?php if(have_posts()): while(have_posts()): the_post(); ?>
+    <?php $id = get_the_ID(); $title = get_the_title(); ?>
     <article role="article" id="post_<?php the_ID()?>" <?php post_class()?>>
         <section>
             <div class="card-group">
@@ -16,7 +17,11 @@ The Single Posts Loop
                 </div>
                 <div class="card-footer text-right">
                   <small class="text-muted">Number of students used it</small>
-                    <a href="<?php echo get_permalink(get_page_by_path('quiz-app')->ID);/*.'?id='.the_ID().'&name='.the_title();*/ ?>" class="btn btn-primary">Start</a>
+                    <?php if(is_user_logged_in()){ ?>
+                    <a href="<?php echo get_permalink(get_page_by_path('quiz-app')->ID) .'?id='.$id; ?>" class="btn btn-primary">Start</a>
+                    <?php } else { ?>
+                    <a href="#" class="btn btn-primary">Sign In/Sign Up</a>
+                    <?php } ?>
                 </div>
               </div>
               <div class="card">

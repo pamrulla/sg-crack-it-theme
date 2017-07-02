@@ -1,5 +1,10 @@
 <script>
     var ajaxurl = '<?php echo admin_url('admin-ajax.php'); ?>';
+    var quizId = '<?php echo $_GET['id']; ?>';
+    var title = '<?php echo get_post($_GET['id'])->post_title; ?>';
+    var level = '<?php echo wp_get_post_terms($_GET['id'], 'level')[0]->name; ?>';
+    var language = '<?php echo wp_get_post_terms($_GET['id'], 'language')[0]->name; ?>';
+    var userId = '<?php echo get_current_user_id(); ?>';
 </script>
 
 <br/>

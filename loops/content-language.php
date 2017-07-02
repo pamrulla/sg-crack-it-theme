@@ -9,8 +9,8 @@ $sgQuizes = array();
 
 <?php if(have_posts()): while(have_posts()): the_post(); ?>
         <?php 
-            $sgterm = get_the_terms(the_ID(), 'level'); 
-            if(!is_wp_error($term))
+            $sgterm = get_the_terms(get_the_ID(), 'level'); 
+            if($sgterm <> null && !is_wp_error($sgterm))
             {
                 if($sgterm[0]->name == "Beginner"){
                     $sgQuizes[0] = $post;

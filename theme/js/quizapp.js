@@ -2,6 +2,7 @@ var isQuizStarted = false;
 var currentQuestion = 0;
 var data = null;
 var ans = [];
+var fullAnswers = []
 
 function toggleSpinner(toHide) {
     jQuery(function($){
@@ -19,12 +20,14 @@ function startQuiz() {
     toggleSpinner(false);
     //Get data from ajax
     d = {
-        action: 'sgcrackit_ajax_get_quiz_questions'
+        action: 'sgcrackit_ajax_get_quiz_questions',
+        'level': level,
+        'language': language
     };
     jQuery.post(ajaxurl, d, function(resp){
         
         data = jQuery.parseJSON(resp.data);
-        
+        console.log(data);
         jQuery(function($){
             toggleSpinner(true);
             $('#quiz-content').fadeOut(500, function(){ 
@@ -50,16 +53,16 @@ function prepareQuestion() {
     content += prepareTimer();
     content += '</div>';
     content += '<hr/>';
-    if( data.Questions[currentQuestion - 1].Type == "SORT") {
+    if( data[currentQuestion - 1].type == "SORT") {
         content += prepareSORTQuestion();
     }
-    else if( data.Questions[currentQuestion - 1].Type == "MC") {
+    else if( data[currentQuestion - 1].type == "MC") {
         content += prepareMCQuestion();
     }
-    else if( data.Questions[currentQuestion - 1].Type == "MA") {
+    else if( data[currentQuestion - 1].type == "MA") {
         content += prepareMAQuestion();
     }
-    else if( data.Questions[currentQuestion - 1].Type == "DESC") {
+    else if( data[currentQuestion - 1].type == "DESC") {
         content += prepareDESCQuestion();
     }
     content += '<hr/>';
@@ -76,7 +79,7 @@ function prepareQuestionTitle() {
     var content = '';
     content += '<div class="col-sm-10">';
     content += '<span id="quiz-question">';
-    content += data.Questions[currentQuestion-1].Question;
+    content += data[currentQuestion-1].question;
     content += '</span>';
     content += '</div>';
     return content;
@@ -106,7 +109,7 @@ function prepareTimer() {
 }
 function prepareProgressBar() {
     var content = '';
-    var progress = (currentQuestion / data.Questions.length) * 100;
+    var progress = (currentQuestion / data.length) * 100;
     
     content += '<div class="row">';
     content += '<div class="col-sm-12">';
@@ -124,7 +127,7 @@ function prepareNextButton() {
     content += '<div class="col-sm-2 offset-sm-10">';
     content += '<div id="qtn-button">';
     content += '<button name="btn" type="button" class="btn btn-primary" onclick="processQuestion();">';
-    content += (currentQuestion == data.Questions.length) ? 'Finish' : 'Next';
+    content += (currentQuestion == data.length) ? 'Finish' : 'Next';
     content += ' <i id="loader" class="fa fa-spinner fa-spin"></button>';
     content += '</div>';
     content += '</div>';
@@ -138,12 +141,12 @@ function prepareMAQuestion() {
     content += '<div class="col-sm-8 offset-sm-2">';
     content += '<div id="qtn-options">';
     content += '<div class="custom-controls-stacked">';
-    var arr = data.Questions[currentQuestion-1].Options;
+    var arr = jQuery.parseJSON(data[currentQuestion-1].options);
     for(i = 0; 0 < arr.length; i++) {
         var ri = Math.floor(Math.random() * arr.length);
         var vl = arr.splice(ri, 1);
         content += '<label class="custom-control custom-checkbox">';
-        content += '<input id="check'+i+'" name="check-'+i+'" type="checkbox" class="custom-control-input">';
+        content += '<input value="'+vl+'" id="check'+i+'" name="check-'+i+'" type="checkbox" class="custom-control-input">';
         content += '<span class="custom-control-indicator"></span>';
         content += '<span class="custom-control-description">'+ vl +'</span>';
         content += '</label>';    
@@ -161,7 +164,7 @@ function prepareMCQuestion() {
     content += '<div class="col-sm-8 offset-sm-2">';
     content += '<div id="qtn-options">';
     content += '<div class="custom-controls-stacked">';
-    var arr = data.Questions[currentQuestion-1].Options;
+    var arr = jQuery.parseJSON(data[currentQuestion-1].options);
     for(i = 0; 0 < arr.length; i++) {
         var ri = Math.floor(Math.random() * arr.length);
         var vl = arr.splice(ri, 1);
@@ -185,7 +188,7 @@ function prepareSORTQuestion() {
     content += '<div id="qtn-options">';
     content += '<div class="container-fluid">';
     content += '<div class="row sorting">';
-    var arr = data.Questions[currentQuestion-1].Options;
+    var arr = jQuery.parseJSON(data[currentQuestion-1].options);
     for(i = 0; 0 < arr.length; i++) {
         var ri = Math.floor(Math.random() * arr.length);
         var vl = arr.splice(ri, 1);
@@ -237,16 +240,16 @@ function prepareDESCQuestion() {
 }
 
 function processAnswer() {
-    if( data.Questions[currentQuestion - 1].Type == "SORT") {
+    if( data[currentQuestion - 1].type == "SORT") {
         return processSORTAnswer();
     }
-    else if( data.Questions[currentQuestion - 1].Type == "MC") {
+    else if( data[currentQuestion - 1].type == "MC") {
         return processMCAnswer();
     }
-    else if( data.Questions[currentQuestion - 1].Type == "MA") {
+    else if( data[currentQuestion - 1].type == "MA") {
         return processMAAnswer();
     }
-    else if( data.Questions[currentQuestion - 1].Type == "DESC") {
+    else if( data[currentQuestion - 1].type == "DESC") {
         return processDESCAnswer();
     }
 }
@@ -288,7 +291,7 @@ function processMAAnswer() {
         }
         ans.splice(0, ans.length);
         for(i =0; i < MAAnswer.length; i++)
-            ans.push(MAAnswer[i].name);
+            ans.push(MAAnswer[i].value);
         isError = false;
         return;
     });
@@ -328,23 +331,23 @@ function processQuestion() {
        return;
     }
     
-    answers = { 
-                'id' : data.ID,
-                'qtnId' : data.Questions[currentQuestion - 1].ID,
-                'userId' : 1,
-                'answer' : ans,
-                'isCompleted' :  currentQuestion == data.Questions.length
-              };
+    obj = { qtnId: data[currentQuestion - 1].id, answer: ans.slice(0, ans.length)};
+    
+    fullAnswers.push(obj);
     
     d = {
         action: 'sgcrackit_ajax_update_quiz_progress',
-        data: answers
+        id : quizId,
+        type : data[currentQuestion - 1].type,
+        userId : userId,
+        answer : JSON.stringify(fullAnswers),
+        isCompleted :  currentQuestion == data.length ? 1 : 0
     };
     
     jQuery.post(ajaxurl, d, function(resp){
-        //console.log(resp.data);
+        //console.log(resp);
         
-        if(currentQuestion == data.Questions.length) {
+        if(currentQuestion == data.length) {
             endingPage();
             toggleSpinner(true);
             return;
@@ -407,7 +410,7 @@ function startingPage(){
     
 if (!isQuizStarted) {
     jQuery(function($){
-        $('#quiz-title').html("Khan1");
+        $('#quiz-title').html(title);
     });
     startingPage();
 }

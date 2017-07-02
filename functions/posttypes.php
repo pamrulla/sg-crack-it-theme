@@ -52,7 +52,7 @@ function sgcrackit_quizes_init() {
 
 add_action('init', 'sgcrackit_quizes_init', 0);
 
-function sgcrackit_questions_init() {
+/*function sgcrackit_questions_init() {
     if( post_type_exists('question') )
     {
         return;
@@ -102,7 +102,7 @@ function sgcrackit_questions_init() {
     register_post_type('question', $args);
 }
 
-add_action('init', 'sgcrackit_questions_init', 0);
+add_action('init', 'sgcrackit_questions_init', 0); */
 
 function sgcrackit_custom_taxonomies() {
     
@@ -182,10 +182,8 @@ add_action('init', 'sgcrackit_custom_taxonomies');
 
 function sgcrackit_rewrite_flush() {
     sgcrackit_quizes_init();
-    sgcrackit_questions_init();
+    //sgcrackit_questions_init();
     sgcrackit_custom_taxonomies();
     flush_rewrite_rules();
 }
 add_action( 'after_switch_theme', 'sgcrackit_rewrite_flush' );
-
-

@@ -137,3 +137,12 @@ function getQuizQuestions($level, $language) {
     $result = $wpdb->get_results($sqlSelect);
     return json_encode($result);
 }
+
+function getPendingQuiz() {
+    global $progressTable;
+    global $wpdb;
+    
+    $sqlSelect = "SELECT $progressTable.id as id, quizId, userId, post_title from $progressTable, wp_posts where isCompleted = 1 and wp_posts.ID = quizId ";
+    $result = $wpdb->get_results($sqlSelect);
+    return json_encode($result);
+}

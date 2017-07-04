@@ -83,4 +83,28 @@ function fetchQuestionsList() {
     });
 }
 
-jQuery(function($) { $("#loader").hide(); $("#loader1").hide(); });
+jQuery(function($) { 
+    if($("#loader").length){$("#loader").hide();} 
+    if($("#loader1").length){$("#loader1").hide();}
+    if($("#quiz-list").length) {
+        d = {
+            action: 'sgcrackit_ajax_admin_get_pending_quiz'
+        };
+    
+        jQuery.post(ajaxurl, d, function(resp){
+            data = jQuery.parseJSON(resp.data);
+            
+            content = '';
+            console.log(data);
+            for(i=0; i<data.length; i++) {
+                console.log(data[i]);
+                content += '<tr>';
+                content += '<th scope="row">'+data[i].id+'</th>';
+                content += '<td>'+data[i].post_title+'</td>';
+                content += '<td><a class="btn btn-danger" href="'+window.location+'&quizId='+data[i].quizId+'&prgId='+data[i].id+'">Validate</a></td>';
+                content += '</tr>';
+            }
+            $("#quiz-list").html(content);
+        });
+    }
+});

@@ -37,5 +37,70 @@ function sgcrackit_load_admin_scripts_validator() {
 }
 
 function sgcrackit_render_validator_page() {
-    echo '<a class="btn btn-primary">a</a>';
-}
+    if(isset($_GET['quizId']) && isset($_GET['prgId'])) {
+        sgcrackit_render_validator_page_single_quiz();
+        return;
+    }
+?>
+    <div class="container">
+        <br>
+        <div class="row">
+            <div class="col-sm-12">
+                <table class="table table-hover">
+                  <thead>
+                    <tr>
+                      <th>#</th>
+                      <th>Quiz</th>
+                      <th>Action</th>
+                    </tr>
+                  </thead>
+                  <tbody id="quiz-list">
+                    
+                  </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+<?php }
+
+function sgcrackit_render_validator_page_single_quiz() { ?>
+        <br>
+        <div class="row">
+            <div class="col-sm-4 text-success">
+                <span>Automated Right Answers: </span>
+            </div>
+            <div class="col-sm-2 text-success">
+                <span id="auto-right-ans">2</span>
+            </div>
+            <div class="col-sm-4 text-danger">
+                <span>Automated Wrong Answers: </span>
+            </div>
+            <div class="col-sm-2 text-danger">
+                <span id="auto-wrong-ans">3</span>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-4 text-success">
+                <span>Manual Right Answers: </span>
+            </div>
+            <div class="col-sm-2 text-success">
+                <span id="manual-right-ans">2</span>
+            </div>
+            <div class="col-sm-4 text-danger">
+                <span>Manual Wrong Answers: </span>
+            </div>
+            <div class="col-sm-2 text-danger">
+                <span id="manual-wrong-ans">3</span>
+            </div>
+        </div>
+        <div class="row text-info">
+            <div class="col-sm-4">
+                <span>Pending Questions: </span>
+            </div>
+            <div class="col-sm-2">
+                <span id="pending-questions">2</span>
+            </div>
+        </div>
+        <br>
+        
+<?php }

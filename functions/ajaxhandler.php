@@ -27,3 +27,9 @@ function sgcrackit_ajax_admin_import_questions() {
 }
 
 add_action('wp_ajax_sgcrackit_ajax_admin_import_questions', 'sgcrackit_ajax_admin_import_questions');
+
+function sgcrackit_ajax_admin_get_pending_quiz() {
+    wp_send_json_success(getPendingQuiz());
+}
+
+add_action('wp_ajax_sgcrackit_ajax_admin_get_pending_quiz', 'sgcrackit_ajax_admin_get_pending_quiz');

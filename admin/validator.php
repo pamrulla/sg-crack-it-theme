@@ -64,43 +64,103 @@ function sgcrackit_render_validator_page() {
 <?php }
 
 function sgcrackit_render_validator_page_single_quiz() { ?>
+        <script>
+            var quizId = <?php echo $_GET['quizId']; ?>;
+            var prgId = <?php echo $_GET['prgId']; ?>;
+             jQuery(document).ready(function() {
+                getPendingFullQuiz(quizId, prgId);  
+            });
+        </script>
         <br>
-        <div class="row">
-            <div class="col-sm-4 text-success">
-                <span>Automated Right Answers: </span>
+        <div id="validation-of-desc">
+            <div class="row">
+                <div class="col-sm-4 text-success">
+                    <span>Automated Right Answers: </span>
+                </div>
+                <div class="col-sm-2 text-success">
+                    <span id="auto-right-ans">0</span>
+                </div>
+                <div class="col-sm-4 text-danger">
+                    <span>Automated Wrong Answers: </span>
+                </div>
+                <div class="col-sm-2 text-danger">
+                    <span id="auto-wrong-ans">0</span>
+                </div>
             </div>
-            <div class="col-sm-2 text-success">
-                <span id="auto-right-ans">2</span>
+            <div class="row">
+                <div class="col-sm-4 text-success">
+                    <span>Manual Right Answers: </span>
+                </div>
+                <div class="col-sm-2 text-success">
+                    <span id="manual-right-ans">0</span>
+                </div>
+                <div class="col-sm-4 text-danger">
+                    <span>Manual Wrong Answers: </span>
+                </div>
+                <div class="col-sm-2 text-danger">
+                    <span id="manual-wrong-ans">0</span>
+                </div>
             </div>
-            <div class="col-sm-4 text-danger">
-                <span>Automated Wrong Answers: </span>
+            <div class="row text-info">
+                <div class="col-sm-4">
+                    <span>Pending Questions: </span>
+                </div>
+                <div class="col-sm-2">
+                    <span id="pending-questions">0</span>
+                </div>
             </div>
-            <div class="col-sm-2 text-danger">
-                <span id="auto-wrong-ans">3</span>
+            <br>
+            <div class="row">
+                <div class="col-sm-10">
+                    <div class="card" style="max-width:100%">
+                      <div class="card-block">
+                        <h6 class="card-title" id="manual-question"></h6>
+                          <hr>
+                        <p class="card-text"  id="manual-answer"></p>
+                      </div>
+                    </div>
+                </div>
+                <div class="col-sm-2">
+                    <button class="btn btn-danger" onclick="updateValidation(false);">Wrong Answer</button>
+                    <br><br>
+                    <button class="btn btn-success" onclick="updateValidation(true);">Validated Answer</button>
+                </div>
             </div>
         </div>
-        <div class="row">
-            <div class="col-sm-4 text-success">
-                <span>Manual Right Answers: </span>
-            </div>
-            <div class="col-sm-2 text-success">
-                <span id="manual-right-ans">2</span>
-            </div>
-            <div class="col-sm-4 text-danger">
-                <span>Manual Wrong Answers: </span>
-            </div>
-            <div class="col-sm-2 text-danger">
-                <span id="manual-wrong-ans">3</span>
+        <div id="final-validation" style="display:none">
+            <br>
+            <div class="row">
+                <div class="col-sm-12">
+                    <div class="card" style="max-width:100%">
+                      <div class="card-block">
+                        <h6 class="card-title" id="manual-question">Final Summary</h6>
+                        <hr>
+                        <div class="row">
+                            <div class="col-sm-4">
+                                <div class="alert alert-success" role="alert">
+                                    Right Answers: <strong id="total-right"></strong>
+                                </div>
+                            </div>
+                            <div class="col-sm-4">
+                                <div class="alert alert-danger" role="alert">
+                                    Wrong Answers: <strong id="total-wrong"></strong>
+                                </div>
+                            </div>
+                            <div class="col-sm-4">
+                                <div class="alert alert-info" role="alert">
+                                    Total Score: <strong id="total-score"></strong>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-12">
+                        <?php wp_editor( '', 'editor-id', $settings = array() ); ?>
+                        </div>
+                      </div>
+                        <div class="card-footer text-muted text-right">
+                            <button class="btn btn-success" onclick="onSubmittingQuizValidation();">Submit Validation</button>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
-        <div class="row text-info">
-            <div class="col-sm-4">
-                <span>Pending Questions: </span>
-            </div>
-            <div class="col-sm-2">
-                <span id="pending-questions">2</span>
-            </div>
-        </div>
-        <br>
-        
 <?php }

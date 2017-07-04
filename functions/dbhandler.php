@@ -146,3 +146,83 @@ function getPendingQuiz() {
     $result = $wpdb->get_results($sqlSelect);
     return json_encode($result);
 }
+
+function getQuizForValidation($quizId, $prgId) {
+    global $questionsTable;
+    global $progressTable;
+    global $wpdb;
+    
+    $sqlSelect = "SELECT answers, userId from $progressTable where isCompleted = 1 and quizId = $quizId and id = $prgId ";
+    $result = $wpdb->get_results($sqlSelect);
+    $userId = $result[0]->userId;
+    $result = json_decode(stripslashes_deep($result[0]->answers));
+    
+    $numberOfAutoRightAnswers = 0;
+    $numberOfAutoWrongAnswers = 0;
+    
+    $manualQuestions = array();
+    
+    foreach( $result as $res ) {
+        $sql = "SELECT * from $questionsTable where id=$res->qtnId ";
+        $qtn = $wpdb->get_results($sql);
+        $ansExpected = json_decode($qtn[0]->answers);
+        $ansActual = json_decode($res->answer);
+        if($qtn[0]->type == 'MC') {
+            if( $ansExpected[0] == $res->answer[0]) {
+                $numberOfAutoRightAnswers += 1;
+            }
+            else {
+                $numberOfAutoWrongAnswers += 1;
+            }
+        }
+        else if($qtn[0]->type == 'MA') {
+            if( count($ansExpected) <> count($res->answer)) {
+                $numberOfAutoWrongAnswers += 1;
+            }
+            else {
+                
+            }
+        }
+        else if($qtn[0]->type == 'SORT') {
+            $optActual = json_decode($qtn[0]->options);
+            for($i = 0; $i < count($optActual); $i++) {
+                if($optActual[$i] <> $res->answer[$i]) {
+                    $numberOfAutoWrongAnswers += 1;
+                    break;
+                }
+            }
+            if($i == count($optActual)) {
+                $numberOfAutoRightAnswers += 1;
+            }
+        }
+        else if($qtn[0]->type == 'DESC') {
+            array_push($manualQuestions, array(
+                'Question' => $qtn[0]->question,
+                'Answer' => $res->answer[0]
+            ));
+        }
+    }
+    
+    $validation = array(
+        "numberOfAutoRightAnswers" => $numberOfAutoRightAnswers,
+        "numberOfAutoWrongAnswers" => $numberOfAutoWrongAnswers,
+        "manualQuestions" => $manualQuestions,
+        "userId" => $userId
+    );
+    
+    return json_encode($validation);
+}
+
+function submit_quiz_score($quizId, $score, $userId) {
+    global $wpdb;
+    global $scoreTable;
+    $resVal = $wpdb->insert(
+                $scoreTable,
+                array(
+                    'quizId' => $quizId,
+                    'userId' => $userId,
+                    'score' => $score
+                )
+            );
+    return ($resVal == false) ? false : true;
+}

@@ -83,6 +83,83 @@ function fetchQuestionsList() {
     });
 }
 
+var pendingQuestions = 0;
+var currentValidationQuestion = 0;
+var manualWrongAnswers = 0;
+var manualRightAnswers = 0;
+var autoRightAnswers = 0;
+var autoWrongAnswers = 0;
+var userId = 0;
+
+function getPendingFullQuiz(quizId, prgId) {
+    jQuery(function($) {
+        d = {
+            action: 'sgcrackit_ajax_admin_get_quiz_for_validation',
+            quizId: quizId,
+            prgId: prgId
+        }
+       
+        jQuery.post(ajaxurl, d, function(resp){
+            res = jQuery.parseJSON(resp.data);
+            pendingQuestions = res.manualQuestions.length;
+            autoRightAnswers = res.numberOfAutoRightAnswers;
+            autoWrongAnswers = res.numberOfAutoWrongAnswers;
+            userId = res.userId;
+            
+            $("#auto-right-ans").html(autoRightAnswers);
+            $("#auto-wrong-ans").html(autoWrongAnswers);
+            $("#manual-right-ans").html(manualRightAnswers);
+            $("#manual-wrong-ans").html(manualWrongAnswers);
+            $("#pending-questions").html(pendingQuestions);
+            $("#manual-question").html(res.manualQuestions[currentValidationQuestion].Question);
+            $("#manual-answer").html(res.manualQuestions[currentValidationQuestion].Answer);
+        });
+        
+    });
+}
+
+function updateValidation(isValid) {
+    jQuery(function($) {
+        if(isValid) {
+            manualRightAnswers += 1;
+            $("#manual-right-ans").html(manualRightAnswers);
+        }
+        else {
+            manualWrongAnswers += 1;
+            $("#manual-wrong-ans").html(manualWrongAnswers);
+        }
+        pendingQuestions -= 1;
+        if(pendingQuestions != 0) {
+            currentValidationQuestion += 1;
+            $("#pending-questions").html(pendingQuestions);
+            $("#manual-question").html(res.manualQuestions[currentValidationQuestion].Question);
+            $("#manual-answer").html(res.manualQuestions[currentValidationQuestion].Answer);
+        }
+        else {
+            $("#validation-of-desc").hide();
+            $("#total-right").html(manualRightAnswers + autoRightAnswers);
+            $("#total-wrong").html(manualWrongAnswers + autoWrongAnswers);
+            $("#final-validation").show();
+        }
+    });
+}
+
+function onSubmittingQuizValidation() {
+    jQuery(function($){
+        console.log(tinyMCE.activeEditor.getContent());
+        d = {
+            action: 'sgcrackit_ajax_admin_submit_quiz_score',
+            quizId: quizId,
+            userId: userId,
+            score: '1'
+        }
+        
+        jQuery.post(ajaxurl, d, function(resp){
+        
+        });
+    });
+}
+
 jQuery(function($) { 
     if($("#loader").length){$("#loader").hide();} 
     if($("#loader1").length){$("#loader1").hide();}

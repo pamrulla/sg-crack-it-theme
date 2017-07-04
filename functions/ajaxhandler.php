@@ -33,3 +33,15 @@ function sgcrackit_ajax_admin_get_pending_quiz() {
 }
 
 add_action('wp_ajax_sgcrackit_ajax_admin_get_pending_quiz', 'sgcrackit_ajax_admin_get_pending_quiz');
+
+function sgcrackit_ajax_admin_get_quiz_for_validation() {
+    wp_send_json_success(getQuizForValidation($_POST['quizId'], $_POST['prgId']));
+}
+
+add_action('wp_ajax_sgcrackit_ajax_admin_get_quiz_for_validation', 'sgcrackit_ajax_admin_get_quiz_for_validation');
+
+function sgcrackit_ajax_admin_submit_quiz_score() {
+    wp_send_json_success(submit_quiz_score($_POST['quizId'], $_POST['score'], $_POST['userId']));
+}
+
+add_action('wp_ajax_sgcrackit_ajax_admin_submit_quiz_score', 'sgcrackit_ajax_admin_submit_quiz_score');

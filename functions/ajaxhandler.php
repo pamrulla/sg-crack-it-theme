@@ -41,7 +41,31 @@ function sgcrackit_ajax_admin_get_quiz_for_validation() {
 add_action('wp_ajax_sgcrackit_ajax_admin_get_quiz_for_validation', 'sgcrackit_ajax_admin_get_quiz_for_validation');
 
 function sgcrackit_ajax_admin_submit_quiz_score() {
-    wp_send_json_success(submit_quiz_score($_POST['quizId'], $_POST['score'], $_POST['userId']));
+    wp_send_json_success(submit_quiz_score($_POST['quizId'], $_POST['score'], $_POST['userId'], $_POST['report']));
 }
 
 add_action('wp_ajax_sgcrackit_ajax_admin_submit_quiz_score', 'sgcrackit_ajax_admin_submit_quiz_score');
+
+function sgcrackit_ajax_admin_calculate_quiz_score() {
+    $manualRightAnswers = $_POST['manualRightAnswers'];
+    $manualWrongAnswers = $_POST['manualWrongAnswers'];
+    $autoRightAnswers = $_POST['autoRightAnswers'];
+    $autoWrongAnswers = $_POST['autoWrongAnswers'];
+    $manualRating = $_POST['rating'];
+    
+    $totalManual = $manualRightAnswers + $manualWrongAnswers;
+    $totalAuto = $autoRightAnswers + $autoWrongAnswers;
+    
+    $manualPercentage = $totalManual * 100 / ($totalManual + $totalAuto);
+    $autoPercentage = 100 - $manualPercentage;
+    
+    $expectedAutoScore = $autoPercentage / 2;
+    $expectedManualScore = 100 - $expectedAutoScore;
+    
+    $autoActual = $expectedAutoScore * $autoRightAnswers / $totalAuto;
+    $manulActual = $expectedManualScore * $manualRating / (10 * $totalManual);
+    
+    return wp_send_json_success(ceil($autoActual + $manulActual));
+}
+
+add_action('wp_ajax_sgcrackit_ajax_admin_calculate_quiz_score', 'sgcrackit_ajax_admin_calculate_quiz_score');

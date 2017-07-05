@@ -6,7 +6,7 @@ function sgcrackit_register_validator_menu_page() {
     
     global $wpdb;
     
-    $sqlSelect = "SELECT COUNT(*) as c FROM $progressTable WHERE isCompleted = 1 ";
+    $sqlSelect = "SELECT COUNT(*) as c FROM $progressTable WHERE isCompleted = 1";
     $result = $wpdb->get_results($sqlSelect);
     
     $count = $result[0]->c;
@@ -122,6 +122,8 @@ function sgcrackit_render_validator_page_single_quiz() { ?>
                 </div>
                 <div class="col-sm-2">
                     <button class="btn btn-danger" onclick="updateValidation(false);">Wrong Answer</button>
+                    <br><br>
+                    <input type="number" name="rating" max="10" min="0" id="rating"/>
                     <br><br>
                     <button class="btn btn-success" onclick="updateValidation(true);">Validated Answer</button>
                 </div>

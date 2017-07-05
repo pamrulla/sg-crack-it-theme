@@ -66,9 +66,7 @@ function fetchQuestionsList() {
             data = jQuery.parseJSON(resp.data);
             
             content = '';
-            console.log(data);
             for(i=0; i<data.length; i++) {
-                console.log(data[i]);
                 content += '<tr>';
                 content += '<th scope="row">'+data[i].id+'</th>';
                 content += '<td>'+data[i].question+'</td>';
@@ -90,6 +88,8 @@ var manualRightAnswers = 0;
 var autoRightAnswers = 0;
 var autoWrongAnswers = 0;
 var userId = 0;
+var finalScore = 0;
+var rating = 0;
 
 function getPendingFullQuiz(quizId, prgId) {
     jQuery(function($) {
@@ -120,9 +120,13 @@ function getPendingFullQuiz(quizId, prgId) {
 
 function updateValidation(isValid) {
     jQuery(function($) {
+        console.log(rating);
         if(isValid) {
             manualRightAnswers += 1;
             $("#manual-right-ans").html(manualRightAnswers);
+            rating += $("#rating")[0].valueAsNumber;
+            console.log(rating);
+        
         }
         else {
             manualWrongAnswers += 1;
@@ -137,24 +141,40 @@ function updateValidation(isValid) {
         }
         else {
             $("#validation-of-desc").hide();
-            $("#total-right").html(manualRightAnswers + autoRightAnswers);
-            $("#total-wrong").html(manualWrongAnswers + autoWrongAnswers);
-            $("#final-validation").show();
+            d = {
+                action: 'sgcrackit_ajax_admin_calculate_quiz_score',
+                manualRightAnswers: manualRightAnswers,
+                manualWrongAnswers: manualWrongAnswers,
+                autoRightAnswers: autoRightAnswers,
+                autoWrongAnswers: autoWrongAnswers,
+                rating: rating
+            }
+            jQuery.post(ajaxurl, d, function(resp){
+                finalScore = resp.data;
+                $("#total-right").html(manualRightAnswers + autoRightAnswers);
+                $("#total-wrong").html(manualWrongAnswers + autoWrongAnswers);
+                $("#total-score").html(finalScore);
+                $("#final-validation").show();
+            });
+            
         }
     });
 }
 
 function onSubmittingQuizValidation() {
     jQuery(function($){
-        console.log(tinyMCE.activeEditor.getContent());
         d = {
             action: 'sgcrackit_ajax_admin_submit_quiz_score',
             quizId: quizId,
             userId: userId,
-            score: '1'
+            score: finalScore,
+            report: JSON.stringify(tinyMCE.activeEditor.getContent())
         }
         
         jQuery.post(ajaxurl, d, function(resp){
+            $("#final-validation").hide();
+            var loc = window.location.href.substr(0, window.location.href.lastIndexOf('&'));
+            window.location.replace(loc.substr(0, loc.lastIndexOf('&')));
         
         });
     });
@@ -172,9 +192,7 @@ jQuery(function($) {
             data = jQuery.parseJSON(resp.data);
             
             content = '';
-            console.log(data);
             for(i=0; i<data.length; i++) {
-                console.log(data[i]);
                 content += '<tr>';
                 content += '<th scope="row">'+data[i].id+'</th>';
                 content += '<td>'+data[i].post_title+'</td>';

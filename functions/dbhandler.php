@@ -41,7 +41,8 @@ function sgcrackit_createTables() {
         id BIGINT NOT NULL AUTO_INCREMENT ,
         quizId BIGINT NOT NULL ,
         userId BIGINT NOT NULL ,
-        score SMALLINT NOT NULL ,  
+        score SMALLINT NOT NULL ,
+        report MEDIUMTEXT NOT NULL ,
         UNIQUE KEY id (id)
     ) $charset_collate;";
     
@@ -142,7 +143,7 @@ function getPendingQuiz() {
     global $progressTable;
     global $wpdb;
     
-    $sqlSelect = "SELECT $progressTable.id as id, quizId, userId, post_title from $progressTable, wp_posts where isCompleted = 1 and wp_posts.ID = quizId ";
+    $sqlSelect = "SELECT $progressTable.id as id, quizId, userId, post_title from $progressTable, wp_posts where isCompleted = 1 and wp_posts.ID = quizId and wp_posts.post_type = 'quiz'";
     $result = $wpdb->get_results($sqlSelect);
     return json_encode($result);
 }
@@ -180,7 +181,23 @@ function getQuizForValidation($quizId, $prgId) {
                 $numberOfAutoWrongAnswers += 1;
             }
             else {
-                
+                $isFound = false;
+                for($i = 0; $i < count($res->answer); $i++) {
+                    $isFound = false;
+                    for($j = 0; $j < count($ansExpected); $j++) {
+                        if($res->answer[$i] == $ansExpected[$j])
+                        {
+                            $isFound = true;
+                        }
+                    }
+                    if($isFound == false) {
+                        $numberOfAutoWrongAnswers += 1;
+                        break;
+                    }
+                }
+                if($isFound) {
+                    $numberOfAutoRightAnswers += 1;
+                }
             }
         }
         else if($qtn[0]->type == 'SORT') {
@@ -213,16 +230,29 @@ function getQuizForValidation($quizId, $prgId) {
     return json_encode($validation);
 }
 
-function submit_quiz_score($quizId, $score, $userId) {
+function submit_quiz_score($quizId, $score, $userId, $report) {
     global $wpdb;
     global $scoreTable;
+    global $progressTable;
+    
     $resVal = $wpdb->insert(
                 $scoreTable,
                 array(
                     'quizId' => $quizId,
                     'userId' => $userId,
-                    'score' => $score
+                    'score' => $score,
+                    'report' => $report
                 )
             );
+    if($resVal == false){
+        return $resVal;
+    }
+    $resVal = $wpdb->delete(
+        $progressTable,
+        array(
+            'quizId' => $quizId,
+            'userId' => $userId
+        )
+    );
     return ($resVal == false) ? false : true;
 }

@@ -3,7 +3,7 @@ var currentQuestion = 0;
 var data = null;
 var ans = [];
 var fullAnswers = []
-
+var AnsweredQuestions = 0;
 function toggleSpinner(toHide) {
     jQuery(function($){
         if(toHide){
@@ -22,12 +22,18 @@ function startQuiz() {
     d = {
         action: 'sgcrackit_ajax_get_quiz_questions',
         'level': level,
-        'language': language
+        'language': language,
+        'isResume' : isResume,
+        'userId' : userId,
+        'quizId' : quizId
     };
     jQuery.post(ajaxurl, d, function(resp){
         
-        data = jQuery.parseJSON(resp.data);
-        console.log(data);
+        dataFull = jQuery.parseJSON(resp.data);
+        data = jQuery.parseJSON(dataFull.Questions);
+        fullAnswers = jQuery.parseJSON(dataFull.Anwers);
+        AnsweredQuestions = dataFull.AnsweredQuestions;
+        
         jQuery(function($){
             toggleSpinner(true);
             $('#quiz-content').fadeOut(500, function(){ 
@@ -109,7 +115,7 @@ function prepareTimer() {
 }
 function prepareProgressBar() {
     var content = '';
-    var progress = (currentQuestion / data.length) * 100;
+    var progress = (currentQuestion / (data.length + AnsweredQuestions)) * 100;
     
     content += '<div class="row">';
     content += '<div class="col-sm-12">';

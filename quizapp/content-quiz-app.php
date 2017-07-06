@@ -5,6 +5,7 @@
     var level = '<?php echo wp_get_post_terms($_GET['id'], 'level')[0]->name; ?>';
     var language = '<?php echo wp_get_post_terms($_GET['id'], 'language')[0]->name; ?>';
     var userId = '<?php echo get_current_user_id(); ?>';
+    var isResume = '<?php echo $_GET['isResume']; ?>';
 </script>
 
 <br/>

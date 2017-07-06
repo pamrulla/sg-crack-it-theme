@@ -69,3 +69,9 @@ function sgcrackit_ajax_admin_calculate_quiz_score() {
 }
 
 add_action('wp_ajax_sgcrackit_ajax_admin_calculate_quiz_score', 'sgcrackit_ajax_admin_calculate_quiz_score');
+
+function sgcrackit_ajax_dashboard_get_participated_quiz() {
+    return wp_send_json_success(dashboard_get_participated_quiz($_POST['userId']));
+}
+
+add_action('wp_ajax_sgcrackit_ajax_dashboard_get_participated_quiz', 'sgcrackit_ajax_dashboard_get_participated_quiz');

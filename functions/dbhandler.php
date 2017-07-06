@@ -285,3 +285,42 @@ function submit_quiz_score($quizId, $score, $userId, $report) {
     );
     return ($resVal == false) ? false : true;
 }
+
+function dashboard_get_participated_quiz($userId) {
+    global $wpdb;
+    global $scoreTable;
+    global $progressTable;
+    
+    
+    $validated = array(
+        array("language" => 'C', "score" => 50),
+        array("language" => 'C1', "score" => 150),
+        array("language" => 'C2', "score" => 250)
+    );
+    
+    $inprogress = array();
+    
+    $sqli = "SELECT quizId from $progressTable WHERE userId = $userId and isCompleted=0 ";
+    $ip = $wpdb->get_results($sqli);
+    
+    foreach($ip as $i) {
+        $level = get_the_terms($i->quizId, 'level')[0]->name;
+        $language = get_the_terms($i->quizId, 'language')[0]->name;
+        array_push($inprogress, array("language" => $language, "level" => $level, "quizId" => $i->quizId ));
+    }
+    
+    $sqlp = "SELECT quizId from $progressTable WHERE userId = $userId and isCompleted=1 ";
+    $p = $wpdb->get_results($sqlp);
+    
+    $pending = array();
+    
+    foreach($p as $i) {
+        $level = get_the_terms($i->quizId, 'level')[0]->name;
+        $language = get_the_terms($i->quizId, 'language')[0]->name;
+        array_push($pending, array("language" => $language, "level" => $level));
+    }
+    
+    
+    
+    return json_encode(array("validated" => $validated, "inprogress" => $inprogress, "pending" => $pending));
+}

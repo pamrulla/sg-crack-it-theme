@@ -65,6 +65,26 @@ function sgcrackit_setup() {
             $home_page_id = wp_insert_post($home_page);
         }
     }
+    
+    if (is_admin()){
+        $home_page_title = 'Dashboard';
+        $home_page_content = '';
+        $home_page_check = get_page_by_title($home_page_title);
+        $home_page = array(
+            'post_type' => 'page',
+            'post_title' => $home_page_title,
+            'post_content' => $home_page_content,
+            'post_status' => 'publish',
+            'post_author' => 1,
+            'post_slug' => 'dashboard',
+            'meta_input' => array(
+                '_wp_page_template' => 'page-dashboard.php'
+            )
+        );
+        if(!the_slug_exists('dashboard')){
+            $home_page_id = wp_insert_post($home_page);
+        }
+    }
 
     $homepage = get_page_by_title( 'Home' );
 

@@ -109,8 +109,8 @@ function insertImport($data) {
                     'options' => json_encode($o->Options),
                     'answers' => json_encode($o->Answers),
                     'type' => $o->Type,
-                    'level' => $obj->level,
-                    'language' => $obj->language
+                    'level' => $obj->Level,
+                    'language' => $obj->Language
                 )
             );
             
@@ -121,6 +121,7 @@ function insertImport($data) {
     return $isError;
 }
 
+//admin
 function getQuestionsList($level, $language) {
     global $questionsTable;
     global $wpdb;
@@ -130,13 +131,41 @@ function getQuestionsList($level, $language) {
     return json_encode($result);
 }
 
-function getQuizQuestions($level, $language) {
+
+function getQuizQuestions($level, $language, $isResume, $userId, $quizId) {
     global $questionsTable;
+    global $progressTable;
     global $wpdb;
     
-    $sqlSelect = "SELECT id, question, options, type FROM $questionsTable WHERE level = '$level' AND language = '$language' ORDER BY RAND() LIMIT 30 ";
-    $result = $wpdb->get_results($sqlSelect);
-    return json_encode($result);
+    $totalQuestions = 4;
+    $result = null;
+    $resultAnswers = array();
+    
+    if($isResume == false){
+        $sqlSelect = "SELECT id, question, options, type FROM $questionsTable WHERE level = '$level' AND language = '$language' ORDER BY RAND() LIMIT $totalQuestions ";
+        $result = $wpdb->get_results($sqlSelect);
+        //return json_encode($result);
+    }
+    else {
+    
+        $sql = "SELECT answers FROM $progressTable WHERE userId = $userId AND quizId = $quizId and isCompleted = 0 ";
+        $resultAnswers = $wpdb->get_results($sql);
+    
+        $resultAnswers = json_decode(stripslashes_deep($resultAnswers[0]->answers));
+    
+        $pendingQuestions = $totalQuestions - count($resultAnswers);
+    
+        $sqlSelect = "SELECT id, question, options, type FROM $questionsTable WHERE level = '$level' AND language = '$language' ORDER BY RAND() LIMIT $pendingQuestions ";
+        $result = $wpdb->get_results($sqlSelect);
+    }
+    
+    $dataToSend = array(
+        'Questions' => json_encode($result),
+        'Anwers' => json_encode($resultAnswers),
+        'AnsweredQuestions' => $isResume ? count($resultAnswers) : 0
+    );
+    
+    return json_encode($dataToSend);
 }
 
 function getPendingQuiz() {

@@ -2,7 +2,7 @@
 
 function sgcrackit_ajax_get_quiz_questions() {
     
-    wp_send_json_success( getQuizQuestions($_POST['level'], $_POST['language']) );
+    wp_send_json_success( getQuizQuestions($_POST['level'], $_POST['language'], $_POST['isResume'], $_POST['userId'], $_POST['quizId']) );
     //die();
 }
 

@@ -43,6 +43,7 @@ function sgcrackit_createTables() {
         userId BIGINT NOT NULL ,
         score SMALLINT NOT NULL ,
         report MEDIUMTEXT NOT NULL ,
+        date DATE NOT NULL,
         UNIQUE KEY id (id)
     ) $charset_collate;";
     
@@ -270,7 +271,8 @@ function submit_quiz_score($quizId, $score, $userId, $report) {
                     'quizId' => $quizId,
                     'userId' => $userId,
                     'score' => $score,
-                    'report' => $report
+                    'report' => $report,
+                    'date' => date("d-m-Y")
                 )
             );
     if($resVal == false){
@@ -292,11 +294,26 @@ function dashboard_get_participated_quiz($userId) {
     global $progressTable;
     
     
-    $validated = array(
-        array("language" => 'C', "score" => 50),
-        array("language" => 'C1', "score" => 150),
-        array("language" => 'C2', "score" => 250)
-    );
+    $validated = array();
+    
+    $sql = "SELECT quizId, MAX(score) as sc FROM $scoreTable WHERE userId = $userId GROUP BY quizId ";
+    $res = $wpdb->get_results($sql);
+    
+    $all_languages = get_terms('language');
+    
+    foreach($all_languages as $lang) {
+        $total_score = 0;
+        
+        for($i = 0; $i < count($res); $i++) {
+            if(get_the_terms($res[$i]->quizId, 'language')[0]->name == $lang->name ) {
+                $total_score += $res[$i]->sc;
+            }
+        }
+        
+        if($total_score != 0) {
+            array_push($validated, array("language" => $lang->name, "score" => $total_score ));
+        }
+    }
     
     $inprogress = array();
     
@@ -323,4 +340,57 @@ function dashboard_get_participated_quiz($userId) {
     
     
     return json_encode(array("validated" => $validated, "inprogress" => $inprogress, "pending" => $pending));
+}
+
+function dashboard_get_quiz_insights($userId, $language) {
+    global $wpdb;
+    global $scoreTable;
+    global $progressTable;
+    
+    
+    $insights = array();
+    
+    $sql = "SELECT date, quizId, score FROM $scoreTable WHERE userId = $userId ORDER BY date ";
+    $res = $wpdb->get_results($sql);
+    
+    $all_languages = get_terms('language');
+    
+    $b_s = 0;
+    $i_s = 0;
+    $a_s = 0;
+    $t_s = 0;
+        
+    
+    for($i = 0; $i < count($res); $i++) {
+        $tms = get_the_terms($res[$i]->quizId, 'language');
+        if($tms[0]->name == $language ) {
+            $level = get_the_terms($res[$i]->quizId, 'level')[0]->name;
+            if($level == "Beginner"){
+                if($b_s < $res[$i]->score) {
+                    $b_s = $res[$i]->score;
+                }
+            }
+            else if($level == "Intermediate") {
+                if($i_s < $res[$i]->score) {
+                    $i_s = $res[$i]->score;
+                }
+            }
+            else
+            {
+                if($a_s < $res[$i]->score) {
+                    $a_s = $res[$i]->score;
+                }
+            }
+            $t_s = $b_s + $i_s + $a_s;
+            array_push($insights, array(
+                    'date' => $res[$i]->date,
+                    'level' => $level,
+                    'score' => $res[$i]->score,
+                    'total_score' => $t_s
+                    )
+            );
+        }
+    }
+    
+    return json_encode($insights);
 }

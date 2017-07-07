@@ -26,9 +26,6 @@ function sgcrackit_enqueues() {
   	wp_register_script('bootstrap-js', 'https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.0.0-alpha.6/js/bootstrap.min.js', false, '4.0.0-alpha.6', true);
 	wp_enqueue_script('bootstrap-js');
 
-    wp_register_script('charts-js', 'https://www.gstatic.com/charts/loader.js', false, '', true);
-	wp_enqueue_script('charts-js');
-
 	wp_register_script('sgcrackit-js', get_template_directory_uri() . '/theme/js/sgcrackit.js', false, null, true);
 	wp_enqueue_script('sgcrackit-js');
     
@@ -36,6 +33,14 @@ function sgcrackit_enqueues() {
         wp_enqueue_script( 'jquery-ui-sortable' );
 	    wp_register_script('quiz-app-js', get_template_directory_uri() . '/theme/js/quizapp.js', false, null, true);
 	    wp_enqueue_script('quiz-app-js');
+    }
+    
+    if(is_page('dashboard')) {
+        wp_register_style('chartist-css', '//cdn.jsdelivr.net/chartist.js/latest/chartist.min.css', false, null);
+	    wp_enqueue_style('chartist-css');
+        
+        wp_register_script('chartist-js', '//cdn.jsdelivr.net/chartist.js/latest/chartist.min.js', false, null, true);
+	    wp_enqueue_script('chartist-js');
     }
 
 	/*if (is_singular() && comments_open() && get_option('thread_comments')) {

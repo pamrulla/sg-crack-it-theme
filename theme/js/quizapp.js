@@ -387,7 +387,7 @@ function endingPage(){
                 content += '</div>';
                 content += '</div>';
                 content += '<div class="text-center">';
-                content += '<a href="#" class="btn btn-primary">Dashboard</a>';
+                content += '<a href="'+dashboardUrl+'" class="btn btn-primary">Dashboard</a>';
                 content += '</div>';
                 $('#quiz-content').html(content);
                 $('#quiz-content').fadeIn(500);

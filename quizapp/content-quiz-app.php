@@ -6,6 +6,7 @@
     var language = '<?php echo wp_get_post_terms($_GET['id'], 'language')[0]->name; ?>';
     var userId = '<?php echo get_current_user_id(); ?>';
     var isResume = '<?php echo $_GET['isResume']; ?>';
+    var dashboardUrl = '<?php echo get_permalink(get_page_by_path('dashboard')->ID); ?>';
 </script>
 
 <br/>

@@ -16,7 +16,6 @@ The Single Posts Loop
                   <p class="card-text"><?php the_content()?></p>
                 </div>
                 <div class="card-footer text-right">
-                  <small class="text-muted">Number of students used it</small>
                     <?php 
                         if(is_user_logged_in()){ 
                             global $progressTable;

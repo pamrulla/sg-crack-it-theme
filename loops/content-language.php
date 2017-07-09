@@ -35,7 +35,6 @@ $sgQuizes = array();
                     <p class="card-text"><?php echo $sgQuizes[$i]->post_content; ?></p>
                 </div>
                 <div class="card-footer text-right">
-                    <small class="text-muted">Last updated 3 mins ago</small>
                     <a href="<?php echo get_permalink($sgQuizes[$i]->ID) ?>" class="btn <?php if($i == 0) { echo 'btn-danger'; } else if($i == 1) { echo 'btn-warning'; } else if($i == 2) { echo 'btn-success'; } ?>">Start</a>
                 </div>
             </div>

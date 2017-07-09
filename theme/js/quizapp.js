@@ -382,7 +382,7 @@ function endingPage(){
                 content += '<div class="card-block">';
                 content += '<blockquote class="card-blockquote">';
                 content += '<h5>Congratulations on completing the quiz.</h5>';
-                content += '<p>You will recieve result of the quiz to your mail in 4 hours.</p>';
+                content += '<p>You will recieve result of the quiz to your mail in 24 hours.</p>';
                 content += '</blockquote>';
                 content += '</div>';
                 content += '</div>';

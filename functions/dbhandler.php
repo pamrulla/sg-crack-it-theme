@@ -3,6 +3,7 @@
 $questionsTable = $wpdb->prefix . "sgct_questions";
 $progressTable = $wpdb->prefix . "sgct_progress";
 $scoreTable = $wpdb->prefix . "sgct_score";
+$postsTable = $wpdb->prefix . "posts";
 
 function sgcrackit_createTables() {
     global $wpdb;
@@ -489,9 +490,10 @@ function getQuizQuestions($level, $language, $isResume, $userId, $quizId) {
 
 function getPendingQuiz() {
     global $progressTable;
+    global $postsTable;
     global $wpdb;
     
-    $sqlSelect = "SELECT $progressTable.id as id, quizId, userId, post_title from $progressTable, wp_posts where isCompleted = 1 and wp_posts.ID = quizId and wp_posts.post_type = 'quiz'";
+    $sqlSelect = "SELECT $progressTable.id as id, quizId, userId, post_title from $progressTable, $postsTable where isCompleted = 1 and $posts.ID = quizId and $postsTable.post_type = 'quiz'";
     $result = $wpdb->get_results($sqlSelect);
     return json_encode($result);
 }

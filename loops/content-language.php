@@ -24,7 +24,6 @@ $sgQuizes = array();
             }
         ?>
 <?php endwhile; ?>
-<br>
 <div class="card-deck">
     <?php for($i = 0; $i < count($sgQuizes); $i++)
         { 

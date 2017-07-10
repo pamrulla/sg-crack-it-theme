@@ -21,7 +21,7 @@ if ( ! empty( $terms ) && ! is_wp_error( $terms ) ){
             if( $next_row <> 0){
                 echo '</div>';
             }
-            echo '<br> <div class="card-deck">';
+            echo '<div class="card-deck">';
         }?>
         <div class="card card-outline-<?php echo $classesColor[$colorIdx%count($classesColor)]; ?>">
           <h4 class="card-header text-<?php echo $classesColor[$colorIdx%count($classesColor)]; ?>">

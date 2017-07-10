@@ -1,7 +1,6 @@
 <script>
 var quizapp = '<?php echo get_permalink(get_page_by_path('quiz-app')); ?>';
 </script>
-<br><br>
 <h5>Welcome, <?php echo wp_get_current_user()->user_firstname; ?></h5>
 <div class=" text-center" id="main-loader"><i class="fa fa-spinner fa-spin" style="font-size:64px;color:lightgreen"></i></div>
 <div class="row" id="list-validated-title" style="display:none">
@@ -15,7 +14,6 @@ var quizapp = '<?php echo get_permalink(get_page_by_path('quiz-app')); ?>';
 </div>
 <br>
 <div class="row" id="list-validated" style="display:none"></div>
-<br>
 <div class="row">
     <div class="col-sm-6">
         <div class="row" id="list-inprogress-title" style="display:none">
@@ -27,7 +25,6 @@ var quizapp = '<?php echo get_permalink(get_page_by_path('quiz-app')); ?>';
                 </div>
             </div>
         </div>
-        <br>
         <div class="row" id="list-inprogress" style="display:none"></div>
     </div>
     <div class="col-sm-6">
@@ -40,8 +37,7 @@ var quizapp = '<?php echo get_permalink(get_page_by_path('quiz-app')); ?>';
                 </div>
             </div>
         </div>
-        <br>
-        <div class="row" id="list-pending" style="display:none">
+        <div class="row" id="list-pending" style="display:none;">
             
         </div>
     </div>
@@ -197,7 +193,7 @@ var quizapp = '<?php echo get_permalink(get_page_by_path('quiz-app')); ?>';
             content += '<div class="col-sm-12">';
             content += '<div class="card card-outline-'+classesColor[i%classesColor.length]+' card-info text-center">';
             content += '<div class="card-block">';
-            content += '<div class="row">';
+            content += '<div class="row" style="margin-top:-10px;">';
             content += '<div class="col-sm-4">'+validated[i].language+'</div>';
             content += '<div class="col-sm-4">'+validated[i].level+'</div>';
             content += '<div class="col-sm-4"><a href="'+quizapp+'?id='+ validated[i].quizId +'&isResume=1" class="btn btn-'+classesColor[i%classesColor.length]+'">Resume</a></div>';
@@ -220,7 +216,7 @@ var quizapp = '<?php echo get_permalink(get_page_by_path('quiz-app')); ?>';
             content += '<div class="col-sm-12">';
             content += '<div class="card card-outline-'+classesColor[i%classesColor.length]+' card-info text-center">';
             content += '<div class="card-block">';
-            content += '<div class="row">';
+            content += '<div class="row" style="margin-top:-10px;">';
             content += '<div class="col-sm-6">'+validated[i].language+'</div>';
             content += '<div class="col-sm-6">'+validated[i].level+'</div>';
             content += '</div>';

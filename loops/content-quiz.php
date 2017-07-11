@@ -3,6 +3,48 @@
 The Single Posts Loop
 =====================
 */
+
+global $memberplanTable;
+    
+global $wpdb;
+
+$user = '';
+$isLoggedIn = false;
+if(is_user_logged_in()) {
+    $user = wp_get_current_user();
+    $isLoggedIn = true;
+}
+
+$userMemberShip = 0;
+$isExpired = false;
+
+if($isLoggedIn) {
+    $sqlSelect = "SELECT * FROM $memberplanTable WHERE userId = $user->ID";
+    $result = $wpdb->get_results($sqlSelect);
+
+    if(count($result) == 0) {
+        $userMemberShip = 0;
+    }
+    else {
+        $userMemberShip = $result[0]->memberplan;
+        $today = date("Y-m-d");
+        $startDate = strtotime($result[0]->startDate);
+        $str = '';
+        if($result[0]->option == 1){
+            $str = "+1 month";
+        }
+        else if($result[0]->option == 2){
+            $str = "+6 month";
+        }
+        else if($result[0]->option == 3){
+            $str = "+12 month";
+        }
+        $expiryDate = date( "Y-m-d",strtotime($str, $startDate));
+        if($expiryDate < $today) {
+           $isExpired = true; 
+        }
+    }
+}
 ?> 
 
 <?php if(have_posts()): while(have_posts()): the_post(); ?>
@@ -17,18 +59,33 @@ The Single Posts Loop
                 </div>
                 <div class="card-footer text-right">
                     <?php 
-                        if(is_user_logged_in()){ 
+                        if($isLoggedIn){ 
                             global $progressTable;
                             global $wpdb;
                             $sql = "SELECT COUNT(*) as c FROM $progressTable WHERE userId = ". get_current_user_id() ." AND quizId = $id and isCompleted = 0 ";
                             $result = $wpdb->get_results($sql);
                             $isResume = ($result[0]->c != 0);
                             
+                            $terms = get_the_terms(get_the_ID(), 'level');
+                            $finalValid = false;
+                            if($terms[0]->name == "Beginner") {
+                                $finalValid = true;
+                            }
+                            else if($terms[0]->name == "Intermediate") {
+                                $finalValid = !$isExpired && (1 <= $userMemberShip);
+                            }
+                            else if($terms[0]->name == "Advanced") {
+                                $finalValid = !$isExpired && (2 <= $userMemberShip);
+                            }
                             if($isResume)
                             { ?>
                     <a href="<?php echo get_permalink(get_page_by_path('quiz-app')->ID) .'?id='.$id.'&isResume=1'; ?>" class="btn btn-primary">Resume</a>
                     <?php   } else {  ?>
+                        <?php   if($finalValid) { ?>
                     <a href="<?php echo get_permalink(get_page_by_path('quiz-app')->ID) .'?id='.$id.'&isResume=0'; ?>" class="btn btn-primary">Start</a>
+                        <?php } else { ?>
+                            <a href="<?php echo get_permalink(get_page_by_path('membership-plans')->ID) ?>" class="btn btn-primary">Buy @ Rs. <?php echo ($terms[0]->name == "Intermediate") ? '300/month' : '500/month'; ?></a>
+                        <?php } ?>
                     <?php } } else { ?>
                     <a href="#" class="btn btn-primary">Sign In/Sign Up</a>
                     <?php } ?>

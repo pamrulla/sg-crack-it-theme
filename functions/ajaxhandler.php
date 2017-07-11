@@ -81,3 +81,9 @@ function sgcrackit_ajax_dashboard_get_quiz_insights() {
 }
 
 add_action('wp_ajax_sgcrackit_ajax_dashboard_get_quiz_insights', 'sgcrackit_ajax_dashboard_get_quiz_insights');
+
+function sgcrackit_ajax_checkout_process_payment() {
+    return wp_send_json_success(checkout_process_payment($_POST['userId'], $_POST['memberplan'], $_POST['option'], $_POST['txnId'], $_POST['amount'], $_POST['status']));
+}
+
+add_action('wp_ajax_sgcrackit_ajax_checkout_process_payment', 'sgcrackit_ajax_checkout_process_payment');

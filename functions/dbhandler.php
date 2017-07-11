@@ -4,12 +4,16 @@ $questionsTable = $wpdb->prefix . "sgct_questions";
 $progressTable = $wpdb->prefix . "sgct_progress";
 $scoreTable = $wpdb->prefix . "sgct_score";
 $postsTable = $wpdb->prefix . "posts";
+$memberplanTable = $wpdb->prefix . "sgct_memberplan";
+$ordersTable = $wpdb->prefix . "sgct_orders";
 
 function sgcrackit_createTables() {
     global $wpdb;
     global $questionsTable;
     global $progressTable;
     global $scoreTable;
+    global $memberplanTable;
+    global $ordersTable;
     
 	$charset_collate = $wpdb->get_charset_collate();
     
@@ -49,6 +53,31 @@ function sgcrackit_createTables() {
     ) $charset_collate;";
     
     dbDelta( $sql2 );
+    
+    $sql3 = "CREATE TABLE $memberplanTable ( 
+        id BIGINT NOT NULL AUTO_INCREMENT ,
+        userId BIGINT NOT NULL ,
+        memberplan SMALLINT NOT NULL ,
+        option SMALLINT NOT NULL ,
+        startDate DATE NOT NULL,
+        UNIQUE KEY id (id)
+    ) $charset_collate;";
+    
+    dbDelta( $sql3 );
+    
+    $sql4 = "CREATE TABLE $ordersTable ( 
+        id BIGINT NOT NULL AUTO_INCREMENT ,
+        userId BIGINT NOT NULL ,
+        txnId MEDIUMTEXT NOT NULL , 
+        memberplan SMALLINT NOT NULL ,
+        option SMALLINT NOT NULL ,
+        date DATE NOT NULL,
+        amount SMALLINT NOT NULL ,
+        status SMALLINT NOT NULL,
+        UNIQUE KEY id (id)
+    ) $charset_collate;";
+    
+    dbDelta( $sql4 );
 }
 
 add_action('after_switch_theme', 'sgcrackit_createTables');
@@ -1025,4 +1054,36 @@ function dashboard_get_quiz_insights($userId, $language) {
     }
     
     return json_encode($insights);
+}
+
+function checkout_process_payment($userId, $memberplan, $option, $txnId, $amount, $status) {
+    global $wpdb;
+    global $memberplanTable;
+    global $ordersTable;
+    
+    if($status == 1) {
+        $wpdb->insert(
+                $memberplanTable,
+                array(
+                    'userId' => $userId,
+                    'memberplan' => $memberplan,
+                    'option' => $option,
+                    'startDate' => date("Y-m-d")
+                )
+            );
+    }
+    $wpdb->insert(
+                $ordersTable,
+                array(
+                    'userId' => $userId,
+                    'memberplan' => $memberplan,
+                    'option' => $option,
+                    'date' => date("Y-m-d"),
+                    'txnId' => $txnId,
+                    'amount' => $amount,
+                    'status' => $status
+                )
+            );
+    
+    return;
 }

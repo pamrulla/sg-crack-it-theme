@@ -7,6 +7,9 @@
     var userId = '<?php echo get_current_user_id(); ?>';
     var isResume = '<?php echo $_GET['isResume']; ?>';
     var dashboardUrl = '<?php echo get_permalink(get_page_by_path('dashboard')->ID); ?>';
+    if(document.referrer == '') {
+        location.href='<?php echo get_permalink($_GET['id']); ?>';
+    }
 </script>
 
 <br/>

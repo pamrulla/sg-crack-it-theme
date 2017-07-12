@@ -1087,3 +1087,82 @@ function checkout_process_payment($userId, $memberplan, $option, $txnId, $amount
     
     return;
 }
+
+function dashboard_account_details($userId) {
+    global $wpdb;
+    global $memberplanTable;
+    global $ordersTable;
+    
+    $sql1 = "SELECT * FROM $memberplanTable WHERE userId = $userId";
+    $res1 = $wpdb->get_results($sql1);
+    
+    $membership = array();
+    
+    if(count($res1) == 0) {
+        array_push($membership, array(
+                    'level' => 'Beginner Plan',
+                    'startdate' => '-',
+                    'enddate' => 'Lifetime Access',
+                    'status' => 'Active'
+                    )
+            );
+    }
+    else {
+        $level = ($res1[0]->memberplan == 1) ? "Intermediate Plan" : "Advanced Plan";
+        $startDate = strtotime($res1[0]->startDate);
+        $str = '';
+        
+        if($res1[0]->option == 1) {
+            $level .= ' For 1 Month';    
+            $str = "+1 month";
+        }
+        else if($res1[0]->option == 2) {
+            $level .= ' For 6 Months';    
+            $str = "+6 month";
+        }
+        else if($res1[0]->option == 3) {
+            $level .= ' For 12 Months';    
+            $str = "+12 month";
+        }
+        $expiryDate = date( "Y-m-d",strtotime($str, $startDate));
+        $status = 'Active';
+        if($expiryDate < date("Y-m-d")) {
+           $status = 'Expired'; 
+        }
+        array_push($membership, array(
+                    'level' => $level,
+                    'startdate' => $res1[0]->startDate,
+                    'enddate' => $expiryDate,
+                    'status' => $status
+                    )
+            );
+    }
+    
+    $sql2 = "SELECT * FROM $ordersTable WHERE userId = $userId";
+    $res2 = $wpdb->get_results($sql2);
+    
+    $orders = array();
+    
+    foreach($res2 as $o){
+        $level = ($o->memberplan == 1) ? "Intermediate Plan" : "Advanced Plan";
+        
+        if($o->option == 1) {
+            $level .= ' For 1 Month';    
+        }
+        else if($o->option == 2) {
+            $level .= ' For 6 Months';    
+        }
+        else if($o->option == 3) {
+            $level .= ' For 12 Months';    
+        }
+        array_push($orders, array(
+            'info' => $level,
+            'txnid' => $o->txnId,
+            'date' => $o->date,
+            'amount' => $o->amount,
+            'status' => ($o->status == 0) ? 'Failed' : 'Success'
+        ));
+    }
+    
+    return json_encode(array('membership' => $membership, 'orders' => $orders));
+}

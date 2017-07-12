@@ -87,3 +87,9 @@ function sgcrackit_ajax_checkout_process_payment() {
 }
 
 add_action('wp_ajax_sgcrackit_ajax_checkout_process_payment', 'sgcrackit_ajax_checkout_process_payment');
+
+function sgcrackit_ajax_dashboard_account_details() {
+    return wp_send_json_success(dashboard_account_details($_POST['userId']));
+}
+
+add_action('wp_ajax_sgcrackit_ajax_dashboard_account_details', 'sgcrackit_ajax_dashboard_account_details');

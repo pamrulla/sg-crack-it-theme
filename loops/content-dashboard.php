@@ -2,7 +2,32 @@
 var quizapp = '<?php echo get_permalink(get_page_by_path('quiz-app')); ?>';
 </script>
 <h5>Welcome, <?php echo wp_get_current_user()->user_firstname; ?></h5>
+<div class="row">
+    <div class="col-sm-2">
+        <a href="?dashboard" style="text-decoration: none">
+        <div class="card card-inverse card-success mb-3 text-center">
+            <div class="card-block">
+                <blockquote class="card-blockquote">
+                    <span>Dashboard</span>
+                </blockquote>
+            </div>
+        </div>
+        </a>
+    </div>
+    <div class="col-sm-2">
+        <a href="?account" style="text-decoration: none">
+        <div class="card card-inverse card-warning mb-3 text-center">
+            <div class="card-block">
+                <blockquote class="card-blockquote">
+                    <span>Account</span>
+                </blockquote>
+            </div>
+        </div>
+        </a>
+    </div>
+</div>
 <div class=" text-center" id="main-loader"><i class="fa fa-spinner fa-spin" style="font-size:64px;color:lightgreen"></i></div>
+<?php if(!isset($_GET['account'])) { ?>
 <div class="row" id="list-validated-title" style="display:none">
     <div class="col-sm-12">
         <div class="card card-inverse card-success text-center">
@@ -470,3 +495,104 @@ var quizapp = '<?php echo get_permalink(get_page_by_path('quiz-app')); ?>';
     }
     
 </script>
+<?php } ?>
+<?php if(isset($_GET['account'])) { ?>
+<div class="row" id="membership-title" style="display:none">
+    <div class="col-sm-12">
+        <div class="card card-inverse card-info text-center">
+            <div class="card-block">
+                <h5>Membership Plan</h5>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="row" id="membership-content" style="display:none">
+    <div class="col-sm-12">
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>Membership Level</th>
+                    <th>Start Date</th>
+                    <th>End Date</th>
+                    <th>Status</th>
+                </tr>
+            </thead>
+            <tbody id="membership-level">
+            </tbody>
+        </table>
+    </div>
+</div>
+<div class="row" id="orders-title" style="display:none">
+    <div class="col-sm-12">
+        <div class="card card-inverse card-warning text-center">
+            <div class="card-block">
+                <h5>Orders History</h5>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="row" id="orders-content" style="display:none">
+    <div class="col-sm-12">
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>#</th>
+                    <th>Info</th>
+                    <th>Transaction Id</th>
+                    <th>Date</th>
+                    <th>Amoutn in Rupees</th>
+                    <th>Status</th>
+                </tr>
+            </thead>
+            <tbody id="orders-details">
+            </tbody>
+        </table>
+    </div>
+</div>
+<script>
+    var ajaxurl = '<?php echo admin_url('admin-ajax.php'); ?>';
+    var userId = '<?php echo get_current_user_id(); ?>';
+    
+    jQuery(function($){
+       d = {
+           action: 'sgcrackit_ajax_dashboard_account_details',
+           userId: userId
+       };
+        
+        jQuery.post(ajaxurl, d, function(resp){
+           data = JSON.parse(resp.data);
+            content = '';
+            content += '<tr>';
+            content += '<td>'+data.membership[0].level+'</td>';
+            content += '<td>'+data.membership[0].startdate+'</td>';
+            content += '<td>'+data.membership[0].enddate+'</td>';
+            content += '<td>'+data.membership[0].status+'</td>';
+            content += '</tr>';
+            $('#membership-level').html(content);
+            
+            content = '';
+            for(i=0; i<data.orders.length; i++){
+                content += '<tr>';
+                content += '<td>'+(i+1)+'</td>';
+                content += '<td>'+data.orders[i].info+'</td>';
+                content += '<td>'+data.orders[i].txnid+'</td>';
+                content += '<td>'+data.orders[i].date+'</td>';
+                content += '<td>'+data.orders[i].amount+'</td>';
+                content += '<td>'+data.orders[i].status+'</td>';
+                content += '</tr>';
+            }
+            if(data.orders.length == 0) {
+                content = '<tr><td class="text-center" colspan=6>No previous orders</td></tr>';
+            }
+            $('#orders-details').html(content);
+            $('#main-loader').hide();
+            $('#membership-title').show();
+            $('#membership-content').show();
+            
+            $('#orders-title').show();
+            $('#orders-content').show();
+        });
+        
+    });
+</script>
+<?php } ?>

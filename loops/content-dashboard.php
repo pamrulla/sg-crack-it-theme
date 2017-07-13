@@ -1,7 +1,7 @@
 <script>
 var quizapp = '<?php echo get_permalink(get_page_by_path('quiz-app')); ?>';
 </script>
-<h5>Welcome, <?php echo wp_get_current_user()->user_firstname; ?></h5>
+<h5>Welcome <?php echo wp_get_current_user()->user_firstname; ?>,</h5>
 <div class="row">
     <div class="col-sm-2">
         <a href="?dashboard" style="text-decoration: none">

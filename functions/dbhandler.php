@@ -174,7 +174,7 @@ function getMainSenderName($name) {
 function getMailFooter() {
     $message = '<p>Good luck!</p>';
     $message .= '<p>Regards,</p>';
-    $message .= '<p style="margin: -20px 0 0 0;">Team SmartGnan.</p>';
+    $message .= '<p>Team SmartGnan.</p>';
     $message .= '</td>';
     $message .= '</tr>';
     $message .= '<tr>';

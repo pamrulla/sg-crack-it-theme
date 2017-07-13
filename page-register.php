@@ -80,20 +80,20 @@ if ($user_ID) {
                 ]
             ];
 
-            $ch = curl_init("https://www.google.com/recaptcha/api/siteverify");
-            curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-            curl_setopt($ch, CURLOPT_TIMEOUT, 15);
-            curl_setopt($ch, CURLOPT_POSTFIELDS, http_build_query($data));
-            //$context  = stream_context_create($options);
-            //$result = file_get_contents($url, false, $context);
-            //$result = json_decode($result)->success;
+            //$ch = curl_init("https://www.google.com/recaptcha/api/siteverify");
+            //curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+            //curl_setopt($ch, CURLOPT_TIMEOUT, 15);
+            //curl_setopt($ch, CURLOPT_POSTFIELDS, http_build_query($data));
+            $context  = stream_context_create($options);
+            $result = file_get_contents($url, false, $context);
+            $result = json_decode($result)->success;
             //echo curl_exec($ch);
             //echo 'Curl error: ' . curl_error($ch);
             //print_r(curl_getinfo($ch));
             //$result = json_decode(curl_exec($ch))->success;
-            //if($result == false){
-            //    $errors['g-recaptcha-response'] = "Captcha verification is failed.";
-            //}
+            if($result == false){
+                $errors['g-recaptcha-response'] = "Captcha verification is failed.";
+            }
             curl_close($ch);
         }
         else{
@@ -109,7 +109,31 @@ if ($user_ID) {
 			// You could do all manner of other things here like send an email to the user, etc. I leave that to you.
             wp_update_user(array( 'ID' => $new_user_id, 'first_name' => $_REQUEST['firstname'], 'last_name' => $_REQUEST['lastname']));
 
-			$success = 1;
+            add_filter( 'wp_mail_content_type', 'wpdocs_set_html_mail_content_type' );
+    
+            $message = getMailHeader();
+            $message .= getMainSenderName($_REQUEST['firstname'] . ' ' . $_REQUEST['lastname']);
+
+            $message .= '<p>Thank you for joining with us. We carefully crafted questions to effectively validate your skills.</p>';
+
+            $message .= '<p>We personally thank you for helping us reaching our mission - <strong><i>Build a platform which validates individual skills as per industry standards and make our score as a baseline for industry.</i></strong></p>';
+
+            $message .= 'We hope our platform helps you enhance your skills and reach your goal. You are always welcome to provide your feedback.';
+            
+            $message .= getMailFooter();
+
+            wp_mail($email, 'SmartGnan CrackIt - Thank you for joining', $message);
+
+	        remove_filter( 'wp_mail_content_type', 'wpdocs_set_html_mail_content_type' );
+            
+            $success = 1;
+            
+            $login_data = array();
+            $login_data['user_login'] = $email;
+            $login_data['user_password'] = $password;
+            $login_data['remember'] = false;
+ 
+            $user_verify = wp_signon( $login_data, false ); 
 
 			header( 'Location:' . get_bloginfo('url') . '/dashboard' );
 

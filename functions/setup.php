@@ -125,6 +125,86 @@ function sgcrackit_setup() {
             $home_page_id = wp_insert_post($home_page);
         }
     }
+    
+    if (is_admin()){
+        $home_page_title = 'LogIn';
+        $home_page_content = '';
+        $home_page_check = get_page_by_title($home_page_title);
+        $home_page = array(
+            'post_type' => 'page',
+            'post_title' => $home_page_title,
+            'post_content' => $home_page_content,
+            'post_status' => 'publish',
+            'post_author' => 1,
+            'post_slug' => 'login',
+            'meta_input' => array(
+                '_wp_page_template' => 'page-login.php'
+            )
+        );
+        if(!the_slug_exists('login')){
+            $home_page_id = wp_insert_post($home_page);
+        }
+    }
+    
+    if (is_admin()){
+        $home_page_title = 'Register';
+        $home_page_content = '';
+        $home_page_check = get_page_by_title($home_page_title);
+        $home_page = array(
+            'post_type' => 'page',
+            'post_title' => $home_page_title,
+            'post_content' => $home_page_content,
+            'post_status' => 'publish',
+            'post_author' => 1,
+            'post_slug' => 'register',
+            'meta_input' => array(
+                '_wp_page_template' => 'page-register.php'
+            )
+        );
+        if(!the_slug_exists('register')){
+            $home_page_id = wp_insert_post($home_page);
+        }
+    }
+    
+    if (is_admin()){
+        $home_page_title = 'Lost Password';
+        $home_page_content = '';
+        $home_page_check = get_page_by_title($home_page_title);
+        $home_page = array(
+            'post_type' => 'page',
+            'post_title' => $home_page_title,
+            'post_content' => $home_page_content,
+            'post_status' => 'publish',
+            'post_author' => 1,
+            'post_slug' => 'lost-password',
+            'meta_input' => array(
+                '_wp_page_template' => 'page-lost-password.php'
+            )
+        );
+        if(!the_slug_exists('lost-password')){
+            $home_page_id = wp_insert_post($home_page);
+        }
+    }
+    
+    if (is_admin()){
+        $home_page_title = 'Logout';
+        $home_page_content = '';
+        $home_page_check = get_page_by_title($home_page_title);
+        $home_page = array(
+            'post_type' => 'page',
+            'post_title' => $home_page_title,
+            'post_content' => $home_page_content,
+            'post_status' => 'publish',
+            'post_author' => 1,
+            'post_slug' => 'logout',
+            'meta_input' => array(
+                '_wp_page_template' => 'page-logout.php'
+            )
+        );
+        if(!the_slug_exists('logout')){
+            $home_page_id = wp_insert_post($home_page);
+        }
+    }
 
     $homepage = get_page_by_title( 'Home' );
 
@@ -158,3 +238,23 @@ function the_slug_exists($post_name) {
 	}
 }
 
+// Login redirects
+
+function custom_login() {
+	echo header("Location: " . get_bloginfo( 'url' ) . "/login");
+}
+
+add_action('login_head', 'custom_login');
+
+function login_link_url( $url ) {
+   $url = get_bloginfo( 'url' ) . "/login";
+   return $url;
+   }
+add_filter( 'login_url', 'login_link_url', 10, 2 );
+
+function remove_admin_bar() {
+    if (!current_user_can('administrator') && !is_admin()) {
+        show_admin_bar(false);
+    }
+}
+add_action('after_setup_theme', 'remove_admin_bar');

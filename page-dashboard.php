@@ -3,6 +3,10 @@
 /*
     Template Name: Page Dashboard
 */ ?>
+<?php
+    if(!is_user_logged_in()) { ?>
+     <script>location.href='<?php echo get_permalink(get_page_by_path('log-in')->ID); ?>';</script>   
+<?php    } ?>
 <?php get_header(); ?>
 
 <div class="container">

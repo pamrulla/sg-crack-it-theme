@@ -56,7 +56,7 @@ function prepareQuestion() {
     content += '<br/>';
     content += '<div class="row">';
     content += prepareQuestionTitle();
-    content += prepareTimer();
+//    content += prepareTimer();
     content += '</div>';
     content += '<hr/>';
     if( data[currentQuestion - 1].type == "SORT") {

@@ -255,3 +255,10 @@ svg circle {
 .page-template-page-quiz-app footer{
     display: none;
 }
+
+/* sign in */
+.form-signin {
+    max-width: 330px;
+    padding: 15px;
+    margin: 0 auto;
+}

@@ -5,10 +5,10 @@ $isSuccess = false;
 $isFailure = false;
 $isCancel = false;
 
-$MERCHANT_KEY = "JIDpuZ";//"D77ZO7";
-$SALT = "fHgfBVAf";//"KezrgVWb";
+$MERCHANT_KEY = "D77ZO7";//"JIDpuZ";//"D77ZO7";
+$SALT = "KezrgVWb";//"fHgfBVAf";//"KezrgVWb";
 // End point - change to https://secure.payu.in for LIVE mode
-$PAYU_BASE_URL = "https://test.payu.in";
+$PAYU_BASE_URL = "https://secure.payu.in";//"https://test.payu.in";
 
 $action = '';
 
@@ -272,7 +272,6 @@ $user = wp_get_current_user();
             <blockquote class="card-blockquote">
               <h3>Your order status is <?php echo $status; ?>.</h3>
               <h4>Your Transaction ID for this transaction is <?php echo $txnid; ?>.</h4>
-              <h4>Please try again.</h4>
               <footer><a href="<?php echo get_permalink(get_page_by_path('dashboard')->ID); ?>" class="btn btn-primary">Dashboard</a></footer>
             </blockquote>
           </div>

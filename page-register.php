@@ -116,7 +116,7 @@ if ($user_ID) {
 
             $message .= '<p>Thank you for joining with us. We carefully crafted questions to effectively validate your skills.</p>';
 
-            $message .= '<p>We personally thank you for helping us reaching our mission - <strong><i>Build a platform which validates individual skills as per industry standards and make our score as a baseline for industry.</i></strong></p>';
+            $message .= '<p>We personally thank you for helping us reaching our mission - <strong><i>Build a platform which validates individual skills as per industry standards and makes our score as a baseline for the industry.</i></strong></p>';
 
             $message .= 'We hope our platform helps you enhance your skills and reach your goal. You are always welcome to provide your feedback.';
             

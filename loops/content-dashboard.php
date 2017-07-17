@@ -67,7 +67,6 @@ var quizapp = '<?php echo get_permalink(get_page_by_path('quiz-app')); ?>';
         </div>
     </div>
 </div>
-<button class="btn btn-info"  style="display:none" id="insights-btn" onclick="displayContents();">Goto Dashboard</button>
 <hr/>
 <div class="row" id="insights-title" style="display:none">
     <div class="col-sm-12">

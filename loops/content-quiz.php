@@ -5,7 +5,7 @@ The Single Posts Loop
 */
 
 global $memberplanTable;
-    
+global $scoreTable;    
 global $wpdb;
 
 $user = '';
@@ -42,6 +42,96 @@ if($isLoggedIn) {
         $expiryDate = date( "Y-m-d",strtotime($str, $startDate));
         if($expiryDate < $today) {
            $isExpired = true; 
+        }
+    }
+}
+
+$isPassed = false;
+$messageToStart = '';
+$targetId = 0;
+
+$t = get_the_terms(get_the_ID(), 'language')[0]->name;
+$l = get_the_terms(get_the_ID(), 'level')[0]->name;
+
+if($l == 'Beginner')
+{
+    $isPassed = true;
+}
+else
+{
+    $posts_array = get_posts(
+        array(
+            'posts_per_page' => -1,
+            'post_type' => 'quiz',
+            'tax_query' => array(
+                array(
+                    'taxonomy' => 'language',
+                    'field' => 'name',
+                    'terms' => $t,
+                ),
+                array(
+                    'taxonomy' => 'level',
+                    'field' => 'name',
+                    'terms' => 'Beginner',
+                )
+            )
+        )
+    );
+    $i1 = $posts_array[0]->ID;
+    $sql = "SELECT MAX(score) as sc FROM $scoreTable WHERE userId = $user->ID and quizId = $i1 GROUP BY quizId";
+    $res = $wpdb->get_results($sql);
+    
+    if(count($res) == 0) {
+        $isPassed = false;
+        $messageToStart = ' Pass Beginner Level';
+        $targetId = $posts_array[0]->ID;
+    }
+    else if($res[0]->sc < 80){
+        $isPassed = false;
+        $messageToStart = ' Pass Beginner Level';
+        $targetId = $posts_array[0]->ID;
+    }
+    else {
+        $isPassed = true;
+    }
+    
+    
+    if($l == 'Advanced' && $isPassed) {
+        $posts_array1 = get_posts(
+            array(
+                'posts_per_page' => -1,
+                'post_type' => 'quiz',
+                'tax_query' => array(
+                    array(
+                        'taxonomy' => 'language',
+                        'field' => 'name',
+                        'terms' => $t,
+                    ),
+                    array(
+                        'taxonomy' => 'level',
+                        'field' => 'name',
+                        'terms' => 'Intermediate',
+                    )
+                )
+            )
+        );
+        
+        $i2 = $posts_array1[0]->ID;
+        $sql1 = "SELECT MAX(score) as sc FROM $scoreTable WHERE userId = $user->ID and quizId = $i2 GROUP BY quizId";
+        $res1 = $wpdb->get_results($sql1);
+
+        if(count($res1) == 0) {
+            $isPassed = false;
+            $messageToStart = ' Pass Intermediate Level';
+            $targetId = $posts_array1[0]->ID;
+        }
+        else if($res1[0]->sc < 80){
+            $isPassed = false;
+            $messageToStart = ' Pass Intermediate Level';
+            $targetId = $posts_array1[0]->ID;
+        }
+        else {
+            $isPassed = true;
         }
     }
 }
@@ -82,12 +172,12 @@ if($isLoggedIn) {
                     <a href="<?php echo get_permalink(get_page_by_path('quiz-app')->ID) .'?id='.$id.'&isResume=1'; ?>" class="btn btn-primary">Resume</a>
                     <?php   } else {  ?>
                         <?php   if($finalValid) { ?>
-                    <a href="<?php echo get_permalink(get_page_by_path('quiz-app')->ID) .'?id='.$id.'&isResume=0'; ?>" class="btn btn-primary">Start</a>
+                    <a href="<?php if($isPassed){echo get_permalink(get_page_by_path('quiz-app')->ID) .'?id='.$id.'&isResume=0';} else { echo get_permalink($targetId); } ?>" class="btn btn-primary"><?php if($isPassed){ echo 'Start'; }else{ echo '<i class="fa fa-lock fa-2x" aria-hidden="true"></i>'.$messageToStart; }?></a>
                         <?php } else { ?>
                             <a href="<?php echo get_permalink(get_page_by_path('membership-plans')->ID) ?>" class="btn btn-primary">Buy @ Rs. <?php echo ($terms[0]->name == "Intermediate") ? '300/month' : '500/month'; ?></a>
                         <?php } ?>
                     <?php } } else { ?>
-                    <a href="#" class="btn btn-primary">Sign In/Sign Up</a>
+                    <a href="#" class="btn btn-primary">Sign In/Sign Up</a>`
                     <?php } ?>
                 </div>
               </div>
@@ -116,7 +206,6 @@ if($isLoggedIn) {
                                   window.webkitRequestAnimationFrame || window.msRequestAnimationFrame;
                     window.requestAnimationFrame = requestAnimationFrame;
                 })();
-
 
                 var canvas = document.getElementById('score-draw');
                 var context = canvas.getContext('2d');

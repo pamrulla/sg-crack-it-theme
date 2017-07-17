@@ -309,26 +309,26 @@ $success = false;
                 <object id="svg4" data="<?php echo get_bloginfo('stylesheet_directory'); ?>/theme/images/back-svg3.svg" type="image/svg+xml" class="block-svg"></object>
             </div>
             <h1 style="position:absolute; z-index: 100; top: 0%; right:50%;">Our Team</h1>
-            <img src="<?php echo get_bloginfo('stylesheet_directory'); ?>/theme/images/DSC_0237.jpg" id="team1" class="team-images floating rounded-circle img-thumbnail" style="top: 10%; right:80%;"/>
-            <span id="team1-text" class="team-images-text floating text-center" style="top: 25%; right:80%;"><strong>Pathan Nihal Khan</strong> <br/> Insipiration</span>
+            <img src="<?php echo get_bloginfo('stylesheet_directory'); ?>/theme/images/nikku.jpg" id="team1" class="team-images floating rounded-circle img-thumbnail" style="top: 10%; right:80%;"/>
+            <span id="team1-text" class="team-images-text floating text-center" style="top: 30%; right:80%;"><strong>Pathan Nihal Khan</strong> <br/> Insipiration</span>
             
-            <img src="<?php echo get_bloginfo('stylesheet_directory'); ?>/theme/images/DSC_0237.jpg" id="team1" class="team-images floating rounded-circle img-thumbnail" style="top: 10%; right:50%;"/>
-            <span id="team1-text" class="team-images-text floating text-center" style="top: 25%; right:50%;"><strong>Sravani Kumari</strong> <br/> Web Technologies</span>
-            
-            
-            <img src="<?php echo get_bloginfo('stylesheet_directory'); ?>/theme/images/DSC_0237.jpg" id="team1" class="team-images floating rounded-circle img-thumbnail" style="top: 10%; right:20%;"/>
-            <span id="team1-text" class="team-images-text floating text-center" style="top: 25%; right:20%;"><strong>Ch Anil Kumar</strong> <br/> JAVA and Webservices</span>
+            <img src="<?php echo get_bloginfo('stylesheet_directory'); ?>/theme/images/sona.jpg" id="team1" class="team-images floating rounded-circle img-thumbnail" style="top: 10%; right:50%;"/>
+            <span id="team1-text" class="team-images-text floating text-center" style="top: 30%; right:50%;"><strong>Sravani Kumari</strong> <br/> Web Technologies</span>
             
             
-            <img src="<?php echo get_bloginfo('stylesheet_directory'); ?>/theme/images/DSC_0237.jpg" id="team1" class="team-images floating rounded-circle img-thumbnail" style="top: 45%; right:80%;"/>
-            <span id="team1-text" class="team-images-text floating text-center" style="top: 60%; right:78%;"><strong>K Ganghadhar Reddy</strong> <br/> Python and its Frameworks</span>
-            
-            <img src="<?php echo get_bloginfo('stylesheet_directory'); ?>/theme/images/DSC_0237.jpg" id="team1" class="team-images floating rounded-circle img-thumbnail" style="top: 45%; right:50%;"/>
-            <span id="team1-text" class="team-images-text floating text-center" style="top: 60%; right:46%;"><strong>P Nagendra Prasad</strong> <br/> Bigdata and Mobile Technologies</span>
+            <img src="<?php echo get_bloginfo('stylesheet_directory'); ?>/theme/images/anil.jpg" id="team1" class="team-images floating rounded-circle img-thumbnail" style="top: 10%; right:20%;"/>
+            <span id="team1-text" class="team-images-text floating text-center" style="top: 30%; right:20%;"><strong>Ch Anil Kumar</strong> <br/> JAVA and Webservices</span>
             
             
-            <img src="<?php echo get_bloginfo('stylesheet_directory'); ?>/theme/images/DSC_0237.jpg" id="team1" class="team-images floating rounded-circle img-thumbnail" style="top: 45%; right:20%;"/>
-            <span id="team1-text" class="team-images-text floating  text-center" style="top: 60%; right:19%;"><strong>Patan Amrulla Khan</strong> <br/> C, C++ and C#</span>
+            <img src="<?php echo get_bloginfo('stylesheet_directory'); ?>/theme/images/reddy.jpg" id="team1" class="team-images floating rounded-circle img-thumbnail" style="top: 45%; right:80%;"/>
+            <span id="team1-text" class="team-images-text floating text-center" style="top: 65%; right:78%;"><strong>K Ganghadhar Reddy</strong> <br/> Python and its Frameworks</span>
+            
+            <img src="<?php echo get_bloginfo('stylesheet_directory'); ?>/theme/images/nagendra.jpg" id="team1" class="team-images floating rounded-circle img-thumbnail" style="top: 45%; right:50%;"/>
+            <span id="team1-text" class="team-images-text floating text-center" style="top: 65%; right:46%;"><strong>P Nagendra Prasad</strong> <br/> Bigdata and Mobile Technologies</span>
+            
+            
+            <img src="<?php echo get_bloginfo('stylesheet_directory'); ?>/theme/images/ammu.jpg" id="team1" class="team-images floating rounded-circle img-thumbnail" style="top: 45%; right:20%;"/>
+            <span id="team1-text" class="team-images-text floating  text-center" style="top: 65%; right:19%;"><strong>Patan Amrulla Khan</strong> <br/> C, C++ and C#</span>
             <?php if(!is_user_logged_in()) { ?>
             <a href="<?php echo get_permalink(get_page_by_path('register')->ID); ?>" class="btn btn-warning" style="position: absolute; left:45%; bottom: 20%;">Join Us for Free</a>
             <?php } ?>  

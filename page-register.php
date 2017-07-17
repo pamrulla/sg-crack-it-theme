@@ -94,7 +94,7 @@ if ($user_ID) {
             if($result == false){
                 $errors['g-recaptcha-response'] = "Captcha verification is failed.";
             }
-            curl_close($ch);
+            //curl_close($ch);
         }
         else{
             $errors['g-recaptcha-response'] = "You must verify using captcha";

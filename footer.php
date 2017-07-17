@@ -1,3 +1,4 @@
+<?php if(!is_front_page()) { ?>
 <footer class="container">
     <hr>
     <div class="row">
@@ -6,7 +7,7 @@
         </div>
     </div>
 </footer>
-
+<?php } ?>
 <?php wp_footer(); ?>
 </body>
 </html>

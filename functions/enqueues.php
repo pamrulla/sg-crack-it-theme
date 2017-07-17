@@ -35,6 +35,15 @@ function sgcrackit_enqueues() {
 	    wp_enqueue_script('quiz-app-js');
     }
     
+    if(is_front_page()) {
+        wp_register_style('jquery-pagepiling-css', get_template_directory_uri() . '/theme/css/jquery.pagepiling.css', false, null);
+	    wp_enqueue_style('jquery-pagepiling-css');
+        wp_register_script('jquery-pagepiling-min-js', get_template_directory_uri() . '/theme/js/jquery.pagepiling.min.js', false, null, true);
+	    wp_enqueue_script('jquery-pagepiling-min-js');
+        wp_register_script('vivus-min-js', get_template_directory_uri() . '/theme/js/vivus.min.js', false, null, true);
+	    wp_enqueue_script('vivus-min-js');
+    }
+    
     if(is_page('dashboard')) {
         wp_register_style('chartist-css', '//cdn.jsdelivr.net/chartist.js/latest/chartist.min.css', false, null);
 	    wp_enqueue_style('chartist-css');

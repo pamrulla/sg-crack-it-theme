@@ -1,7 +1,7 @@
 <div class="card-deck">
   <div class="card">
     <div class="card-header card-primary text-center"><strong>Beginner Level</strong></div>
-    <div class="card-block">
+    <div class="card-block" style="background-color: #add9ff">
         <ul class="list-group">
             <li class="list-group-item">Access All Beginner Quizes</li>
             <li class="list-group-item"><span>&nbsp;</span></li>
@@ -18,7 +18,7 @@
   </div>
   <div class="card">
     <div class="card-header card-info text-center"><strong>Intermediate Level</strong></div>
-    <div class="card-block">
+    <div class="card-block" style="background-color: #9ecfde">
         <ul class="list-group">
             <li class="list-group-item">Access All Beginner Quizes</li>
             <li class="list-group-item list-group-item-info">Access All Intermediate Quizes</li>
@@ -35,7 +35,7 @@
   </div>
   <div class="card">
     <div class="card-header card-success text-center"><strong>Advanced Level</strong></div>
-    <div class="card-block">
+    <div class="card-block" style="background-color: #b9e1a9">
         <ul class="list-group">
             <li class="list-group-item">Access All Beginner Quizes</li>
             <li class="list-group-item">Access All Intermediate Quizes</li>

@@ -96,6 +96,7 @@ $success = false;
     overflow: hidden;
     top: 50px;
     opacity: 0.1;
+    pointer-events: none;
 }
     
 #human1 {
@@ -105,6 +106,7 @@ $success = false;
     right: 33.5%;
     bottom: 40%;
     z-index: 5;
+    pointer-events: none;
 }
 
 #human {
@@ -114,6 +116,7 @@ $success = false;
     right: 20%;
     bottom: 33%;
     z-index: 5;
+    pointer-events: none;
 }
     
 #chel1 {
@@ -123,6 +126,7 @@ $success = false;
     right: 50%;
     bottom: 30%;
     z-index: 5;
+    pointer-events: none;
 }
     
     
@@ -133,6 +137,7 @@ $success = false;
     right: 21%;
     bottom: 33%;
     z-index: 5;
+    pointer-events: none;
 }
     
 #chel3 {
@@ -142,6 +147,7 @@ $success = false;
     right: 18%;
     bottom: 35%;
     z-index: 5;
+    pointer-events: none;
 }
 
 .contact-us{
@@ -156,6 +162,7 @@ $success = false;
     height: 20%;
     position: absolute;
     z-index: 100;
+    pointer-events: none;
 }
 
 .floating {  
@@ -178,6 +185,7 @@ $success = false;
     height: 40%;
     position: absolute;
     z-index: 100;
+    pointer-events: none;
 }
     
  .mission-data {
@@ -185,6 +193,7 @@ $success = false;
     height: 50%;
     position: absolute;
     z-index: 100;
+    pointer-events: none;
 }
 
 .team-images {
@@ -197,6 +206,38 @@ $success = false;
  .team-images-text {
     z-index: 100;
     position: absolute;
+}
+    
+.scroll-downs {
+  position: absolute;
+  bottom: 10%;
+  left: 50%;
+  z-index: 1000;
+  width :34px;
+  height: 55px;
+}
+.mousey {
+  width: 3px;
+  padding: 6px 15px;
+  height: 50px;
+  border: 2px solid #000000;
+  border-radius: 20px;
+  opacity: 1;
+}
+.scroller {
+  width: 3px;
+  height: 10px;
+  border-radius: 25%;
+  background-color: #000000;
+  animation-name: scroll;
+  animation-duration: 2.2s;
+  animation-timing-function: cubic-bezier(.15,.41,.69,.94);
+  animation-iteration-count: infinite;
+}
+@keyframes scroll {
+  0% { opacity: 0; }
+  10% { transform: translateY(0); opacity: 1; }
+  100% { transform: translateY(15px); opacity: 0;}
 }
     
 </style>
@@ -212,6 +253,15 @@ $success = false;
             <object id="page1-4" data="<?php echo get_bloginfo('stylesheet_directory'); ?>/theme/images/page14.svg" type="image/svg+xml" class="item-data floating" style="right: 34%; bottom: 70%;"></object>
             <object id="page1-5" data="<?php echo get_bloginfo('stylesheet_directory'); ?>/theme/images/page15.svg" type="image/svg+xml" class="item-data floating" style="right: 25%; bottom: 50%;"></object>
             <object id="page1-6" data="<?php echo get_bloginfo('stylesheet_directory'); ?>/theme/images/page16.svg" type="image/svg+xml" class="item-data floating" style="right: 20%; bottom: 30%;"></object>
+            <?php if(!is_user_logged_in()) { ?>
+            <a href="<?php echo get_permalink(get_page_by_path('register')->ID); ?>" class="btn btn-primary" style="position: absolute; left:45%; bottom: 20%;">Join Us for Free</a>
+            <?php } ?>
+            
+            <div class="scroll-downs">
+              <div class="mousey">
+                <div class="scroller"></div>
+              </div>
+            </div>
         </div>
         <div class="section" id="what-you-get">
             <div class="back-svg">
@@ -224,6 +274,15 @@ $success = false;
             <object id="page2-4" data="<?php echo get_bloginfo('stylesheet_directory'); ?>/theme/images/page24.svg" type="image/svg+xml" class="item-data floating" style="right: 30%; bottom: 70%;"></object>
             <object id="page2-5" data="<?php echo get_bloginfo('stylesheet_directory'); ?>/theme/images/page25.svg" type="image/svg+xml" class="item-data floating" style="right: 35%; bottom: 50%;"></object>
             <object id="page2-6" data="<?php echo get_bloginfo('stylesheet_directory'); ?>/theme/images/page26.svg" type="image/svg+xml" class="item-data floating" style="right: 40%; bottom: 30%;"></object>
+            <?php if(!is_user_logged_in()) { ?>
+            <a href="<?php echo get_permalink(get_page_by_path('register')->ID); ?>" class="btn btn-info" style="position: absolute; left:45%; bottom: 20%;">Join Us for Free</a>
+            <?php } ?>
+            
+            <div class="scroll-downs">
+              <div class="mousey">
+                <div class="scroller"></div>
+              </div>
+            </div>
         </div>
         <div class="section" id="our-mission">
             <div class="back-svg">
@@ -235,6 +294,15 @@ $success = false;
             <img src="<?php echo get_bloginfo('stylesheet_directory'); ?>/theme/images/mission.gif" id="mission" class="mission" style="left: 5%; top: 10%;"/>
             <!--<object id="mission" data="<?php echo get_bloginfo('stylesheet_directory'); ?>/theme/images/mission.svg" type="image/svg+xml" class="mission" style="left: 5%; top: 1%;"></object>-->
             <object id="mission-data" data="<?php echo get_bloginfo('stylesheet_directory'); ?>/theme/images/missiondata.svg" type="image/svg+xml" class="mission-data" style="left: 1%; top: 20%;"></object>
+            <?php if(!is_user_logged_in()) { ?>
+            <a href="<?php echo get_permalink(get_page_by_path('register')->ID); ?>" class="btn btn-success" style="position: absolute; left:45%; bottom: 20%;">Join Us for Free</a>
+            <?php } ?>
+            
+            <div class="scroll-downs">
+              <div class="mousey">
+                <div class="scroller"></div>
+              </div>
+            </div>
         </div>
         <div class="section" id="our-team">
             <div class="back-svg">
@@ -242,33 +310,41 @@ $success = false;
             </div>
             <h1 style="position:absolute; z-index: 100; top: 0%; right:50%;">Our Team</h1>
             <img src="<?php echo get_bloginfo('stylesheet_directory'); ?>/theme/images/DSC_0237.jpg" id="team1" class="team-images floating rounded-circle img-thumbnail" style="top: 10%; right:80%;"/>
-            <span id="team1-text" class="team-images-text floating" style="top: 30%; right:75%;"><strong>Patan Amrulla Khan</strong> - C, C++ and C#</span>
+            <span id="team1-text" class="team-images-text floating text-center" style="top: 25%; right:80%;"><strong>Pathan Nihal Khan</strong> <br/> Insipiration</span>
             
             <img src="<?php echo get_bloginfo('stylesheet_directory'); ?>/theme/images/DSC_0237.jpg" id="team1" class="team-images floating rounded-circle img-thumbnail" style="top: 10%; right:50%;"/>
-            <span id="team1-text" class="team-images-text floating" style="top: 30%; right:45%;"><strong>Patan Amrulla Khan</strong> - C, C++ and C#</span>
+            <span id="team1-text" class="team-images-text floating text-center" style="top: 25%; right:50%;"><strong>Sravani Kumari</strong> <br/> Web Technologies</span>
             
             
             <img src="<?php echo get_bloginfo('stylesheet_directory'); ?>/theme/images/DSC_0237.jpg" id="team1" class="team-images floating rounded-circle img-thumbnail" style="top: 10%; right:20%;"/>
-            <span id="team1-text" class="team-images-text floating" style="top: 30%; right:15%;"><strong>Patan Amrulla Khan</strong> - C, C++ and C#</span>
+            <span id="team1-text" class="team-images-text floating text-center" style="top: 25%; right:20%;"><strong>Ch Anil Kumar</strong> <br/> JAVA and Webservices</span>
             
             
-            <img src="<?php echo get_bloginfo('stylesheet_directory'); ?>/theme/images/DSC_0237.jpg" id="team1" class="team-images floating rounded-circle img-thumbnail" style="top: 50%; right:80%;"/>
-            <span id="team1-text" class="team-images-text floating" style="top: 70%; right:75%;"><strong>Patan Amrulla Khan</strong> - C, C++ and C#</span>
+            <img src="<?php echo get_bloginfo('stylesheet_directory'); ?>/theme/images/DSC_0237.jpg" id="team1" class="team-images floating rounded-circle img-thumbnail" style="top: 45%; right:80%;"/>
+            <span id="team1-text" class="team-images-text floating text-center" style="top: 60%; right:78%;"><strong>K Ganghadhar Reddy</strong> <br/> Python and its Frameworks</span>
             
-            <img src="<?php echo get_bloginfo('stylesheet_directory'); ?>/theme/images/DSC_0237.jpg" id="team1" class="team-images floating rounded-circle img-thumbnail" style="top: 50%; right:50%;"/>
-            <span id="team1-text" class="team-images-text floating" style="top: 70%; right:45%;"><strong>Patan Amrulla Khan</strong> - C, C++ and C#</span>
+            <img src="<?php echo get_bloginfo('stylesheet_directory'); ?>/theme/images/DSC_0237.jpg" id="team1" class="team-images floating rounded-circle img-thumbnail" style="top: 45%; right:50%;"/>
+            <span id="team1-text" class="team-images-text floating text-center" style="top: 60%; right:46%;"><strong>P Nagendra Prasad</strong> <br/> Bigdata and Mobile Technologies</span>
             
             
-            <img src="<?php echo get_bloginfo('stylesheet_directory'); ?>/theme/images/DSC_0237.jpg" id="team1" class="team-images floating rounded-circle img-thumbnail" style="top: 50%; right:20%;"/>
-            <span id="team1-text" class="team-images-text floating" style="top: 70%; right:15%;"><strong>Patan Amrulla Khan</strong> - C, C++ and C#</span>
+            <img src="<?php echo get_bloginfo('stylesheet_directory'); ?>/theme/images/DSC_0237.jpg" id="team1" class="team-images floating rounded-circle img-thumbnail" style="top: 45%; right:20%;"/>
+            <span id="team1-text" class="team-images-text floating  text-center" style="top: 60%; right:19%;"><strong>Patan Amrulla Khan</strong> <br/> C, C++ and C#</span>
+            <?php if(!is_user_logged_in()) { ?>
+            <a href="<?php echo get_permalink(get_page_by_path('register')->ID); ?>" class="btn btn-warning" style="position: absolute; left:45%; bottom: 20%;">Join Us for Free</a>
+            <?php } ?>  
             
+            <div class="scroll-downs">
+              <div class="mousey">
+                <div class="scroller"></div>
+              </div>
+            </div>          
         </div>
         <div class="section" id="contact-us">
             <div class="back-svg">
                 <object id="svg5" data="<?php echo get_bloginfo('stylesheet_directory'); ?>/theme/images/back-svg2.svg" type="image/svg+xml" class="block-svg"></object>
             </div>
             <object id="human" data="<?php echo get_bloginfo('stylesheet_directory'); ?>/theme/images/human.svg" type="image/svg+xml" class="block-svg" style="width: 260px; height:320px"></object>
- <div class="contact-us" id="contact-us" style="left: 20%; top: 1%">
+ <div class="contact-us" id="contact-us" style="left: 20%; top: 10%">
     <div class="row1">
         <div class="form-signin card card-outline-success" style="background-color:white; min-width: 70%">
             <div class="card-header text-center">Contact Us</div>
@@ -306,6 +382,12 @@ $success = false;
         </div>
     </div>
 </div>
+            
+            <div class="scroll-downs">
+              <div class="mousey">
+                <div class="scroller"></div>
+              </div>
+            </div>
            
         </div>
     </div>
@@ -365,6 +447,8 @@ $success = false;
                    });
                }
            });
+           $.fn.pagepiling.setMouseWheelScrolling(true);
+           //addTouchHandler();
             
         });
     });

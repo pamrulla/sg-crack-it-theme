@@ -15,15 +15,31 @@
             <a class="navbar-brand" href="<?php echo esc_url( home_url('/') ); ?>"><?php bloginfo('name'); ?></a>
               <div class="collapse navbar-collapse" id="navbarNavDropdown">
                     <?php
-                          wp_nav_menu( array(
-                            'theme_location'		=> 'navbar',
-                            'container'         => false,
+                        $locations = get_nav_menu_locations();;
+                        $menu = get_term( $locations['primary'], 'nav_menu' );
+                        $menu_items = wp_get_nav_menu_items($menu->term_id);
+                        echo '<ul class="navbar-nav mr-auto mt-2 mt-lg-0">';
+                        foreach( $menu_items as $menu_item ) {
+                            if(get_permalink() == $menu_item->url){
+                                echo '<li class="nav-item active">';
+                            }
+                            else {
+                                echo '<li class="nav-item">';
+                            }
+                            echo '<a class="nav-link" href="'.$menu_item->url.'">'.$menu_item->title.'</a>';
+                            echo '</li>';
+                        }
+                        echo '</ul>';
+                          /*wp_nav_menu( array(
+                              'menu'              => 'Navbar',
+                            'theme_location'		=> 'Navbar',
+                            'container'         => 'false',
                             'menu_class'				=> '',
-                            'fallback_cb'				=> '__return_false',
+                            'fallback_cb'				=> false,
                             'items_wrap'				=> '<ul id="%1$s" class="navbar-nav mr-auto mt-2 mt-lg-0 %2$s">%3$s</ul>',
                             'depth'							=> 2,
                             'walker'            => new sgcrackit_walker_nav_menu()
-                          ) );
+                          ) );*/
                     ?>
               </div>
         </nav>
